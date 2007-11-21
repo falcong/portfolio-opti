@@ -1,0 +1,19 @@
+ld = new LagrangeDual(int constraintToRelax, int lambda = 0)
+ld.solve(Problem pb)
+...
+solve(Problem pb) {
+  constraintToRelax = pb.getConstraintToRelax() OR UserSetting
+  Problem relaxed-pb = relax(pb, constraintToRelax)
+  
+  return dual(relaxed-pb);
+}
+
+dual(Problem relaxed-pb) {
+  X = getInitSolution(relaxed-pb) // soit avec c-plex en enlevant la fonction objective, soit avec une methode maison
+  Problem sub-pb = minToMax(relaxed-pb) {...omega_sup|omega_inf = pb.objective(initSol)...}
+  {w*, lambda} = cplex.solve(sub-pb)
+  while( w* != computeObjective(relaxed-pb, lambda) AND w_sup != w_inf) {
+    sub-pb.addConstraint(w** +|- coef * lambda < computeObjective(relaxed-pb, X))
+    X = getNewPoint(relaxed-pb);
+    {w*, lambda} = cplex.solve(sub-pb)
+  }
