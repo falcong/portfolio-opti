@@ -1,20 +1,41 @@
 #ifndef CONSTRAINT_H_
 #define CONSTRAINT_H_
 
-#include <string>
 #include <list>
+#include <string>
+#include <iostream>
+#include <sstream>
 
 #include "Term.h"
+
+typedef const std::list<Term> TermList;
 
 class Constraint {
 private:
 	float bound;
-	std::string operat;
+	int operat;
 	std::list<Term> terms;
 
 public:
+	static const int L = 0;
+	static const int LE = 1;
+	static const int G = 2;
+	static const int GE = 3;
+	static const int EQ = 4;
+	static const int NE = 5;
+
 	Constraint();
 	virtual ~Constraint();
+
+	virtual float getBound() const;
+	virtual void setBound(float bound);
+	virtual int getOperator() const;
+	virtual void setOperator(int operat);
+	virtual std::list<Term> getTerms() const;
+	virtual void addTerm(Term term);
+
+	virtual std::string toString() const;
+	virtual void print() const;
 };
 
 #endif /*CONSTRAINT_H_*/
