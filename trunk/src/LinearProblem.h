@@ -25,7 +25,7 @@ public:
 	virtual void getReglage(float temp) const;
 	
 	virtual void addVariable(Variable &var);
-	virtual std::list<Variable>* getVariables();
+	virtual std::list<Variable> getVariables() const;
 };
 
 #endif /*LINEARPROBLEM_H_*/

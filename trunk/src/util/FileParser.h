@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <iterator>
+#include <cmath>
 
 #include "../DetQuadProblem.h"
 #include "../StochLinearProblem.h"
@@ -21,7 +22,7 @@ public:
 	FileParser();
 	virtual ~FileParser();
 	
-	LinearProblem* parseDetModel(std::string filepath);
+	DetQuadProblem* parseDetModel(std::string filepath, std::string fileFEpath);
 	StochLinearProblem* parseStochModel(std::string filepath);
 };
 

@@ -11,19 +11,24 @@
 
 #include "util/FileParser.h"
 
-typedef	std::list<Variable> lv;
+typedef	std::vector<float> vf;
+typedef	std::vector< std::vector<float> > vvf;
 
 int main(void) {
 	puts("Hello World!!!");
 
 	FileParser* fp = new FileParser();
-	LinearProblem * lp = fp->parseDetModel("../benchmark/DAX.txt");
+	DetQuadProblem * dqp = fp->parseDetModel("../benchmark/DAX.txt", "../benchmark/DAX_FE.txt");
 
-	for (lv::iterator i = lp->getVariables()->begin(); i != lp->getVariables()->end(); ++i) {
-		/* Nothing is going to be print out because:
-		   while the actual variables are of VariableFloat class 
-		   the class expected if of type Variable */
-		std::cout << i->toString() << std::endl;
+	for (vf::iterator i = dqp->getMeanValues().begin(); i != dqp->getMeanValues().end(); ++i) {
+		std::cout << *i << std::endl;
 	}
+	for(int j = 0; j < 85; ++j) {
+		for(int k = 0; k < 85; ++k) {
+			std::cout << dqp->sigma[j][k] << " ";
+		}
+		std::cout << std::endl;
+	}
+	
 	return EXIT_SUCCESS;
 }
