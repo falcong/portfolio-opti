@@ -20,7 +20,6 @@ public:
 	virtual float getUpperBound() const;
 	
 	virtual std::string toString() const;
-	virtual void print() const;
 };
 
 #endif /*VARIABLEFLOAT_H_*/

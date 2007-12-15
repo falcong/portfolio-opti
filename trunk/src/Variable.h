@@ -8,9 +8,12 @@
 class Variable {
 public:
 	virtual ~Variable();
-	
-	virtual std::string toString() const { return "";};
-	virtual void print() const {};
+
+	friend std::ostream& operator<<(std::ostream& os, const Variable& v) {
+		return os << v.toString();
+	};
+	virtual std::string toString() const;
+	virtual void print() const;
 };
 
 #endif /*VARIABLE_H_*/

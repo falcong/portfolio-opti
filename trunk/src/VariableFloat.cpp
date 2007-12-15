@@ -17,10 +17,6 @@ float VariableFloat::getUpperBound() const {
 
 std::string VariableFloat::toString() const {
 	std::ostringstream os;
-	os << "[" << lowerBound << ";" << upperBound << "]";
+	os << "["<< lowerBound << ";"<< upperBound << "]";
 	return os.str();
-}
-
-void VariableFloat::print() const {
-	std::cout << this->toString()<< std::endl;
 }

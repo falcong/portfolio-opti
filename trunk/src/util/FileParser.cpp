@@ -6,7 +6,8 @@ FileParser::FileParser() {
 FileParser::~FileParser() {
 }
 
-DetQuadProblem* FileParser::parseDetModel(std::string filepath, std::string fileFEpath) {
+DetQuadProblem* FileParser::parseDetModel(std::string filepath,
+		std::string fileFEpath) {
 	DetQuadProblem* dqp= NULL;
 	std::ifstream file(filepath.data());
 	if (file.is_open()) {
@@ -14,7 +15,7 @@ DetQuadProblem* FileParser::parseDetModel(std::string filepath, std::string file
 		int state = FIRST;
 		int total = 0, current = 0;
 		std::vector<float> variances;
-		
+
 		while (std::getline(file, line) && line.size() > 1) {
 			std::istringstream iss(line.substr(line.find_first_of(" ")).c_str() );
 			std::vector<std::string> str_list;
@@ -37,9 +38,9 @@ DetQuadProblem* FileParser::parseDetModel(std::string filepath, std::string file
 				*(new std::istringstream(str_list[2])) >> variance;
 				dqp->addMeanValue(mean_value);
 				variances.push_back(variance);
-				dqp->sigma[current][current] = variance;
-				
-				if (++current == total) {					
+				dqp->getCovariances()[current][current] = variance;
+
+				if (++current == total) {
 					state = CORR;
 					current = 0;
 				}
@@ -48,10 +49,10 @@ DetQuadProblem* FileParser::parseDetModel(std::string filepath, std::string file
 				*(new std::istringstream(str_list[1])) >> line;
 				*(new std::istringstream(str_list[2])) >> column;
 				*(new std::istringstream(str_list[3])) >> correlation;
-				covariance = correlation*sqrt(dqp->sigma[line-1][line-1])*sqrt(dqp->sigma[column-1][column-1]);
-				dqp->sigma[line-1][column-1] = covariance;
-				dqp->sigma[column-1][line-1] = covariance;
-				
+				covariance = correlation*sqrt(dqp->getCovariances()[line-1][line-1])*sqrt(dqp->getCovariances()[column-1][column-1]);
+				dqp->getCovariances()[line-1][column-1] = covariance;
+				dqp->getCovariances()[column-1][line-1] = covariance;
+
 				if (++current == total*total) {
 					state = -1;
 					current = 0;
