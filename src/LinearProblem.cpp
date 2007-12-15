@@ -24,6 +24,6 @@ void LinearProblem::addVariable(Variable &var) {
 	variables.push_back(var);
 }
 
-std::list<Variable>* LinearProblem::getVariables() {
-	return &variables;
+std::list<Variable> LinearProblem::getVariables() const {
+	return variables;
 }
