@@ -8,6 +8,7 @@
 
 #include "Problem.h"
 #include "LinearProblem.h"
+#include "Objective.h"
 #include "Constraint.h"
 #include "Term.h"
 #include "Variable.h"
