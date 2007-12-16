@@ -10,6 +10,8 @@
 #include <stdlib.h>
 
 #include "util/FileParser.h"
+#include "algo/NaiveAlgorithm.h"
+#include "Solution.h"
 
 typedef std::vector<float> vf;
 typedef std::vector< std::vector<float> > vvf;
@@ -20,7 +22,13 @@ int main(void) {
 			"../benchmark/SIMPLE_FE.txt");
 
 	dqp->print();
-	dqp->getLinearProblem().print();
-
+	LinearProblem lp = dqp->getLinearProblem();
+	lp.print();
+	
+	NaiveAlgorithm is = NaiveAlgorithm();
+	Solution sol = is.getInitialSolution(lp);
+	
+	sol.print();
+	
 	return EXIT_SUCCESS;
 }

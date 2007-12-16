@@ -31,7 +31,7 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 	// TODO: not finished	
 	LinearProblem lp;
 	Objective obj = Objective();
-	
+
 	// Xi sum equals to 1, and Sum of mui * Xi >= rho
 	const float lowerBound = 0;
 	const float upperBound = 1;
@@ -103,6 +103,10 @@ std::vector<float> DetQuadProblem::getMeanValues() const {
 
 std::vector< std::vector<float> > & DetQuadProblem::getCovariances() {
 	return sigma;
+}
+
+int DetQuadProblem::getK() const {
+	return k;
 }
 
 std::string DetQuadProblem::toString() const {
