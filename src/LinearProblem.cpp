@@ -36,9 +36,14 @@ std::vector<Constraint> LinearProblem::getConstraints() const {
 	return constraints;
 }
 
+void LinearProblem::setObjective(Objective &objective) {
+	this->objective = objective;
+}
+
 std::string LinearProblem::toString() const {
 	std::ostringstream os;
 	os << "Linear Problem:"<< std::endl;
+	os << objective << std::endl;
 	os << (int)variables.size() << " Variables:";
 	for (int i = 0; i != (int)variables.size(); ++i) {
 		os << "v"<< i << "-"<< *(variables[i])<< ", ";

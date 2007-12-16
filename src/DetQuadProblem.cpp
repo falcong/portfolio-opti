@@ -28,12 +28,13 @@ void DetQuadProblem::getReglage(float temp) const {
 }
 
 LinearProblem DetQuadProblem::getLinearProblem() const {
-	// TODO: not finished
+	// TODO: not finished	
+	LinearProblem lp;
+	Objective obj = Objective();
+	
+	// Xi sum equals to 1, and Sum of mui * Xi >= rho
 	const float lowerBound = 0;
 	const float upperBound = 1;
-
-	// Xi sum equals to 1, and Sum of mui * Xi >= rho
-	LinearProblem lp;
 	Constraint c1 = Constraint();
 	Constraint c2 = Constraint();
 	for (int i = 0; i < n; ++i) {
@@ -68,6 +69,7 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 			// Adding the c_ij variables
 			VariableFloat * var = new VariableFloat(lowerBound, upperBound);
 			lp.addVariable(var);
+			obj.addTerm(*new Term(var, sigma[i][j]));
 			// cij - xi <= 0
 			c1.addTerm(*new Term(lp.getVariables()[i], -1.0));
 			c1.setOperator(Constraint::LE);
@@ -87,6 +89,7 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 			lp.addConstraint(c3);
 		}
 	}
+	lp.setObjective(obj);
 	return lp;
 }
 
