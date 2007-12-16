@@ -38,6 +38,7 @@ public:
 	std::vector<float> getMeanValues() const;
 	void addCovariance(float cov);
 	std::vector< std::vector<float> > & getCovariances();
+	virtual int getK() const;
 
 	virtual std::string toString() const;
 	virtual void print() const;

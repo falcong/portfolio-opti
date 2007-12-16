@@ -12,6 +12,7 @@
 
 class LinearProblem : public Problem {
 private:
+	int nbStocks;
 	Objective objective;
 	std::vector<Constraint> constraints;
 	// Using pointers to ensure dynamic mapping of virtual functions to the real class
