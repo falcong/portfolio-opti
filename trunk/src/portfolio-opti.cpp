@@ -10,7 +10,10 @@
 #include <stdlib.h>
 
 #include "util/FileParser.h"
+#include "algo/InitialSolver.h"
 #include "algo/NaiveAlgorithm.h"
+#include "algo/Algo.h"
+#include "algo/SimulatedAnnealing.h"
 #include "Solution.h"
 
 typedef std::vector<float> vf;
@@ -25,11 +28,10 @@ int main(void) {
 	LinearProblem lp = dqp->getLinearProblem();
 	//lp.print();
 	
-	NaiveAlgorithm is = NaiveAlgorithm();
-	Solution sol = is.getInitialSolution2(*dqp, 1);
+	Algo * algo = new SimulatedAnnealing();
+	InitialSolver * is = new NaiveAlgorithm();
+	Solution sol = algo->solve(*dqp, is);
 	sol.print();
-	
-	//std::cout << "The fucking dumb ass result: " << dqp->objectiveFunction(sol) << std::endl;
 
 	return EXIT_SUCCESS;
 }
