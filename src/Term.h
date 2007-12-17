@@ -15,6 +15,8 @@ public:
 	Term(Variable * v, float c);
 	virtual ~Term();
 
+	virtual float getCoeff() const;
+	
 	virtual std::string toString() const;
 	virtual void print() const;
 };

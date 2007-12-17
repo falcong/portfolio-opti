@@ -13,32 +13,49 @@
 #include "Term.h"
 #include "Variable.h"
 #include "VariableFloat.h"
+#include "Stock.h"
 
 class DetQuadProblem : public Problem {
 private:
+	Objective objective;
+	std::vector<Variable*> variables;
 	// TODO: give explicit names to the variables
 	int n;
-	std::vector<float> mu;
-	float rho;
 	int k;
+	float rho;
+	std::vector<Stock> stocks;
+	std::vector<float> mu;
 	std::vector<float> epsilon;
 	std::vector<float> delta;
 	std::vector< std::vector<float> > sigma;
 
 public:
-	DetQuadProblem(int nbStocks);
+	DetQuadProblem(int nbTotalStocks, int stockSelSize, float yield);
 	virtual ~DetQuadProblem();
 
-	virtual float objectiveFunction() const;
+	virtual float objectiveFunction(Solution sol) const;
 	virtual Solution getNeighbour(Solution x, int size) const;
 	virtual void getReglage(float temp) const;
 
 	LinearProblem getLinearProblem() const;
+	
+	virtual Objective getObjective();
+	virtual void setObjective(Objective &objective);
+	
+	virtual void addVariable(Variable * var);
+	virtual std::vector<Variable*> getVariables() const;
+	
 	void addMeanValue(float mv);
 	std::vector<float> getMeanValues() const;
+	
 	void addCovariance(float cov);
 	std::vector< std::vector<float> > & getCovariances();
+	
+	void addStock(Stock stock);
+	std::vector<Stock> getStocks() const;
+	
 	virtual int getK() const;
+	virtual float getRho() const;
 
 	virtual std::string toString() const;
 	virtual void print() const;

@@ -12,6 +12,7 @@
 #include "../DetQuadProblem.h"
 #include "../StochLinearProblem.h"
 #include "../VariableFloat.h"
+#include "../Stock.h"
 
 class FileParser {
 private:
