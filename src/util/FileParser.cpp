@@ -34,7 +34,7 @@ DetQuadProblem* FileParser::parseDetModel(std::string filepath,
 				*(new std::istringstream(str_list[1])) >> total;
 				state = STOCKS;
 				// TODO arbitrary stock selection size and minimum yield
-				dqp = new DetQuadProblem(total, total/2, 0.01);
+				dqp = new DetQuadProblem(total, total/2, 0.004);
 				break;
 			case STOCKS:
 				*(new std::istringstream(str_list[1])) >> meanYield;
@@ -48,8 +48,8 @@ DetQuadProblem* FileParser::parseDetModel(std::string filepath,
 				dqp->addVariable(var);
 
 				// TODO concurrent way to build a DetQuadPb with a list of stocks;
-				dqp->addStock(*new Stock(current, meanYield, variance, 0, 1));
-				
+				dqp->addStock(*new Stock(current, meanYield, variance, 1.0/(dqp->getK()*2),1.0/(dqp->getK())));
+
 				if (++current == total) {
 					state = CORR;
 					current = 0;
@@ -73,7 +73,7 @@ DetQuadProblem* FileParser::parseDetModel(std::string filepath,
 			}
 		}
 	}
-	if(dqp != NULL) {
+	if (dqp != NULL) {
 		dqp->setObjective(obj);
 	}
 	return dqp;

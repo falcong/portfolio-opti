@@ -35,39 +35,7 @@ Solution NaiveAlgorithm::getInitialSolution(LinearProblem &pb) {
 	return sol;
 }
 
-Solution NaiveAlgorithm::getInitialSolution(DetQuadProblem &pb) {
-	int stockSelSize = pb.getK();
-	float differential = 0.0, totalRatio = 0.0;
-	Solution sol = Solution(); 
-
-	for (int i = 0; i != (int)pb.getVariables().size(); ++i) {
-		VariableFloat & var = *(VariableFloat*)pb.getVariables()[i];
-		float var_value = 0.0;
-
-		if (pb.getMeanValues()[i] > pb.getRho() && totalRatio < 1) {
-			float ratio = 1.0/stockSelSize;
-			if (ratio < var.getLowerBound()) {
-				var_value = var.getLowerBound();
-				differential += var_value - ratio;
-			} else if (ratio > var.getUpperBound()) {
-				var_value = var.getLowerBound();
-				differential += var_value - ratio;
-			} else {
-				var_value = ratio;
-			}
-
-			if (differential != 0.0) {
-				var_value += (differential > 0) ? var.getUpperBound()
-						- var_value : var.getLowerBound() - var_value;
-			}
-		}
-		totalRatio += var_value;
-		sol.addVariable(var_value);
-	}
-	return sol;
-}
-
-Solution NaiveAlgorithm::getInitialSolution2(DetQuadProblem &pb, float limitRatio) {
+Solution NaiveAlgorithm::getInitialSolution(DetQuadProblem &pb, float limitRatio) {
 	int stockSelSize = pb.getK();
 	float differential = 0.0, totalRatio = 0.0;
 	Solution sol = Solution();
