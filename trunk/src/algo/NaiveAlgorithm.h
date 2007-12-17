@@ -15,6 +15,7 @@ public:
 	
 	virtual Solution getInitialSolution(LinearProblem &pb);
 	virtual Solution getInitialSolution(DetQuadProblem &pb);
+	virtual Solution getInitialSolution2(DetQuadProblem &pb, float totalRatio);
 };
 
 #endif /*NAIVEALGORITHM_H_*/

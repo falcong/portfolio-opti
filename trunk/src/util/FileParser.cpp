@@ -9,6 +9,8 @@ FileParser::~FileParser() {
 DetQuadProblem* FileParser::parseDetModel(std::string filepath,
 		std::string fileFEpath) {
 	DetQuadProblem* dqp= NULL;
+	Objective obj = Objective();
+
 	std::ifstream file(filepath.data());
 	if (file.is_open()) {
 		std::string line;
@@ -23,23 +25,31 @@ DetQuadProblem* FileParser::parseDetModel(std::string filepath,
 			while (std::getline(iss, value, ' ') ) {
 				str_list.push_back(value);
 			}
-			float mean_value, variance, correlation, covariance;
+			float meanYield, variance, correlation, covariance;
 			int line, column;
+			VariableFloat * var;
 
 			switch (state) {
 			case FIRST:
 				*(new std::istringstream(str_list[1])) >> total;
-				std::cout << total << std::endl;
 				state = STOCKS;
-				dqp = new DetQuadProblem(total);
+				// TODO arbitrary stock selection size and minimum yield
+				dqp = new DetQuadProblem(total, total/2, 0.01);
 				break;
 			case STOCKS:
-				*(new std::istringstream(str_list[1])) >> mean_value;
+				*(new std::istringstream(str_list[1])) >> meanYield;
 				*(new std::istringstream(str_list[2])) >> variance;
-				dqp->addMeanValue(mean_value);
+				dqp->addMeanValue(meanYield);
 				variances.push_back(variance);
 				dqp->getCovariances()[current][current] = variance;
+				// TODO this is hardcoding the lower and upper bound
+				var = new VariableFloat(0,1);
+				obj.addTerm(*new Term(var, variance));
+				dqp->addVariable(var);
 
+				// TODO concurrent way to build a DetQuadPb with a list of stocks;
+				dqp->addStock(*new Stock(current, meanYield, variance, 0, 1));
+				
 				if (++current == total) {
 					state = CORR;
 					current = 0;
@@ -62,6 +72,9 @@ DetQuadProblem* FileParser::parseDetModel(std::string filepath,
 				break;
 			}
 		}
+	}
+	if(dqp != NULL) {
+		dqp->setObjective(obj);
 	}
 	return dqp;
 }

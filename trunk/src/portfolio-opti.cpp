@@ -18,17 +18,18 @@ typedef std::vector< std::vector<float> > vvf;
 
 int main(void) {
 	FileParser* fp = new FileParser();
-	DetQuadProblem * dqp = fp->parseDetModel("../benchmark/SIMPLE.txt",
-			"../benchmark/SIMPLE_FE.txt");
+	DetQuadProblem * dqp = fp->parseDetModel("benchmark/SIMPLE.txt",
+			"benchmark/SIMPLE_FE.txt");
 
 	dqp->print();
 	LinearProblem lp = dqp->getLinearProblem();
-	lp.print();
+	//lp.print();
 	
 	NaiveAlgorithm is = NaiveAlgorithm();
-	Solution sol = is.getInitialSolution(lp);
-	
+	Solution sol = is.getInitialSolution2(*dqp, 1);
 	sol.print();
 	
+	//std::cout << "The fucking dumb ass result: " << dqp->objectiveFunction(sol) << std::endl;
+
 	return EXIT_SUCCESS;
 }

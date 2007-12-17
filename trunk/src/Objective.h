@@ -7,6 +7,7 @@
 #include <sstream>
 
 #include "Term.h"
+#include "Solution.h"
 
 typedef const std::list<Term> TermList;
 
@@ -22,6 +23,8 @@ public:
 	
 	virtual std::list<Term> getTerms() const;
 	virtual void addTerm(Term term);
+	
+	virtual float result(Solution sol) const; 
 	
 	friend std::ostream& operator<<(std::ostream& os, const Objective& o) {
 		return os << o.toString();

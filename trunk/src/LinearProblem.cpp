@@ -6,9 +6,8 @@ LinearProblem::LinearProblem() {
 LinearProblem::~LinearProblem() {
 }
 
-float LinearProblem::objectiveFunction() const {
-	// TODO: not implemented
-	return 0.0;
+float LinearProblem::objectiveFunction(Solution sol) const {
+	return objective.result(sol);
 }
 
 Solution LinearProblem::getNeighbour(Solution x, int size) const {

@@ -1,10 +1,10 @@
 #include "DetQuadProblem.h"
 
-DetQuadProblem::DetQuadProblem(int nbStocks) {
-	n = nbStocks;
-	for (int i = 0; i < nbStocks; ++i) {
+DetQuadProblem::DetQuadProblem(int nbTotalStocks, int stockSelSize, float yield) :
+	n(nbTotalStocks), k(stockSelSize), rho(yield) {
+	for (int i = 0; i < n; ++i) {
 		sigma.push_back(*(new std::vector<float>()));
-		for (int j = 0; j < nbStocks; ++j) {
+		for (int j = 0; j < n; ++j) {
 			sigma[i].push_back(0.0);
 		}
 	}
@@ -13,9 +13,8 @@ DetQuadProblem::DetQuadProblem(int nbStocks) {
 DetQuadProblem::~DetQuadProblem() {
 }
 
-float DetQuadProblem::objectiveFunction() const {
-	// TODO: not implemented
-	return 0.0;
+float DetQuadProblem::objectiveFunction(Solution sol) const {
+	return objective.result(sol);
 }
 
 Solution DetQuadProblem::getNeighbour(Solution x, int size) const {
@@ -93,6 +92,22 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 	return lp;
 }
 
+Objective DetQuadProblem::getObjective() {
+	return objective;
+}
+
+void DetQuadProblem::setObjective(Objective &objective) {
+	this->objective = objective;
+}
+
+void DetQuadProblem::addVariable(Variable * var) {
+	variables.push_back(var);
+}
+
+std::vector<Variable*> DetQuadProblem::getVariables() const {
+	return variables;
+}
+
 void DetQuadProblem::addMeanValue(float mv) {
 	mu.push_back(mv);
 }
@@ -105,14 +120,35 @@ std::vector< std::vector<float> > & DetQuadProblem::getCovariances() {
 	return sigma;
 }
 
+void DetQuadProblem::addStock(Stock stock) {
+	stocks.push_back(stock);
+}
+
+std::vector<Stock> DetQuadProblem::getStocks() const {
+	return stocks;
+}
+
 int DetQuadProblem::getK() const {
 	return k;
+}
+
+float DetQuadProblem::getRho() const {
+	return rho;
 }
 
 std::string DetQuadProblem::toString() const {
 	std::ostringstream os;
 	os << "DetQuad Problem:"<< std::endl;
-	os << "Mean values: ";
+	os << (int)stocks.size() << " Stocks:";
+	for (int i = 0; i != (int)stocks.size(); ++i) {
+		os << stocks[i]<< " ";
+	}
+	os << std::endl << objective << std::endl;
+	os << (int)variables.size() << " Variables:";
+	for (int i = 0; i != (int)variables.size(); ++i) {
+		os << "v"<< i << "-"<< *(variables[i])<< ", ";
+	}
+	os << std::endl << "Mean values: ";
 	for (int i = 0; i != (int)mu.size(); ++i) {
 		os << getMeanValues()[i]<< " ";
 	}

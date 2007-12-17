@@ -12,7 +12,6 @@
 
 class LinearProblem : public Problem {
 private:
-	int nbStocks;
 	Objective objective;
 	std::vector<Constraint> constraints;
 	// Using pointers to ensure dynamic mapping of virtual functions to the real class
@@ -22,7 +21,7 @@ public:
 	LinearProblem();
 	virtual ~LinearProblem();
 
-	virtual float objectiveFunction() const;
+	virtual float objectiveFunction(Solution sol) const;
 	virtual Solution getNeighbour(Solution x, int size) const;
 	virtual void getReglage(float temp) const;
 
