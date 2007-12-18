@@ -37,12 +37,15 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 	Constraint c1 = Constraint();
 	Constraint c2 = Constraint();
 	for (int i = 0; i < n; ++i) {
-		VariableFloat * var = new VariableFloat(i, lowerBound, upperBound);
+		std::ostringstream os;
+		os << "X_" << i;
+		VariableFloat * var = new VariableFloat(i+1, os.str(), lowerBound, upperBound);
 		lp.addVariable(var);
 		c1.addTerm(*new Term(var, 1));
 		c2.addTerm(*new Term(var, mu[i]));
 	}
 	c1.setOperator(Constraint::cEQ);
+	// TODO harcoded total stock ratio
 	c1.setBound(1);
 	c2.setOperator(Constraint::cGE);
 	c2.setBound(rho);
@@ -66,25 +69,35 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 			 * the first n variables must be the x_i, beware of the y_i
 			 */
 			// Adding the c_ij variables
-			VariableFloat * var = new VariableFloat(n+i+j, lowerBound, upperBound);
+			std::ostringstream os;
+			os << "C_" << i << "," << j;
+			VariableFloat * var = new VariableFloat(n+i+j+1, os.str(), lowerBound, upperBound);
 			lp.addVariable(var);
 			obj.addTerm(*new Term(var, sigma[i][j]));
 			// cij - xi <= 0
+			c1.addTerm(*new Term(var, 1.0));
 			c1.addTerm(*new Term(lp.getVariables()[i], -1.0));
 			c1.setOperator(Constraint::cLE);
 			c1.setBound(0);
+			lp.addConstraint(c1);
 			// cij - cj <= 0
-			c2.addTerm(*new Term(lp.getVariables()[j], -1.0));
-			c2.setOperator(Constraint::cLE);
-			c2.setBound(0);
+			if(i != j) {
+				c2.addTerm(*new Term(var, 1.0));
+				c2.addTerm(*new Term(lp.getVariables()[j], -1.0));
+				c2.setOperator(Constraint::cLE);
+				c2.setBound(0);
+				lp.addConstraint(c2);
+			}
 			// cij - ci - cj >= -1
-			c3.addTerm(*new Term(lp.getVariables()[i], -1.0));
-			c3.addTerm(*new Term(lp.getVariables()[j], -1.0));
+			c3.addTerm(*new Term(var, 1.0));
+			if(i != j) {
+				c3.addTerm(*new Term(lp.getVariables()[i], -1.0));
+				c3.addTerm(*new Term(lp.getVariables()[j], -1.0));
+			} else {
+				c3.addTerm(*new Term(lp.getVariables()[i], -2.0));
+			}
 			c3.setOperator(Constraint::cGE);
 			c3.setBound(-1);
-
-			lp.addConstraint(c1);
-			lp.addConstraint(c2);
 			lp.addConstraint(c3);
 		}
 	}

@@ -49,11 +49,11 @@ std::string LinearProblem::toString() const {
 	os << objective << std::endl;
 	os << (int)variables.size() << " Variables:";
 	for (int i = 0; i != (int)variables.size(); ++i) {
-		os << "v"<< i << "-"<< *(variables[i])<< ", ";
+		os << *(variables[i])<< ", ";
 	}
-	os << std::endl << (int)constraints.size() << " Constraits:";
+	os << std::endl << (int)constraints.size() << " Constraits:"<< std::endl;
 	for (int i = 0; i != (int)constraints.size(); ++i) {
-		os << "c"<< i << "-"<< constraints[i].toString() << ", ";
+		os << constraints[i].toString() << std::endl;
 	}
 	return os.str();
 }

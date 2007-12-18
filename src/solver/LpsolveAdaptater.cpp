@@ -15,10 +15,16 @@ Solution LpsolveAdaptater::getSolution(LinearProblem * lp) {
 		// TODO raise an exception
 	}
 
+	/* set variables name to ease debugging */
+	for (int i = 0; i < (int)lp->getVariables().size(); ++i) {
+		set_col_name(lprec, i+1, (*(lp->getVariables())[i]).getNameToChar());
+	}
+
 	/* to build the model faster when adding constraints one at a time */
 	set_add_rowmode(lprec, TRUE);
 
 	for (int i = 0; i < (int)(lp->getConstraints().size()); ++i) {
+		// FIXME there's a bug here but I can't find it
 		Constraint c = (Constraint)(lp->getConstraints()[i]);
 		TermList terms = c.getTerms();
 		int col[terms.size()];
@@ -27,14 +33,11 @@ Solution LpsolveAdaptater::getSolution(LinearProblem * lp) {
 		for (TermList::const_iterator it = terms.begin(); it != terms.end();
 				++it, ++j) {
 			// TODO check if this is fixed
-			// getPosition is probably out of bound, should it not be j and then row[j] = getposition ?
-			//col[((Term)*it).getVariable().getPosition()] = (int)std::floor((( Term )*it).getCoeff() * 100);
-			col[j] = ((Term)*it).getVariable().getPosition(); 
-			row[j] = (int)std::floor((( Term )*it).getCoeff() * 100);
+			col[j] = ((Term)*it).getVariable().getPosition();
+			row[j] = ((Term)*it).getCoeff();
 		}
 		// WARNING the Consraint uses the same operator values than in lp_lib.h
-		if (!add_constraintex(lprec, i, row, col, c.getOperator(), c.getBound()
-				* 100)) {
+		if (!add_constraintex(lprec, i, row, col, c.getOperator(), c.getBound())) {
 			// TODO raise an exception
 		}
 	}
@@ -48,37 +51,36 @@ Solution LpsolveAdaptater::getSolution(LinearProblem * lp) {
 
 	for (TermList::const_iterator it = terms.begin(); it != terms.end(); ++it,
 			++i) {
-		// getPosition is probably out of bound
-		//col[(( Term )*it).getVariable().getPosition()] = (int)std::floor((( Term )*it).getCoeff() * 100);
-		col[i] = ((Term)*it).getVariable().getPosition(); 
-		row[i] = (int)std::floor((( Term )*it).getCoeff() * 100);
+		col[i] = ((Term)*it).getVariable().getPosition();
+		row[i] = (( Term )*it).getCoeff();
 	}
-	if(!set_obj_fnex(lprec, i, row, col)) {
+	if (!set_obj_fnex(lprec, i, row, col)) {
 		// TODO raise an exception
 	}
-	
-	if(lp->getObjective().isMinimize()) {
+
+	if (lp->getObjective().isMinimize()) {
 		set_minim(lprec);
 	} else {
 		set_maxim(lprec);
 	}
-	
+
 	return getSolution(lprec);
 }
 
 Solution LpsolveAdaptater::getSolution(lprec * lp) {
 	Solution sol = Solution();
 	REAL row[get_Norig_columns(lp)];
+	write_LP(lp, stdout);
 	solve(lp);
-	
+
 	// WARNING possible conversion failure from double to float
 	sol.setZ(get_objective(lp));
 	get_variables(lp, row);
-	
-	for(int i = 0; i < get_Norig_columns(lp); ++i) {
+
+	for (int i = 0; i < get_Norig_columns(lp); ++i) {
 		sol.addVariable(row[i]);
 	}
-	
+
 	delete_lp(lp);
 	return sol;
 }

@@ -33,7 +33,7 @@ void Constraint::addTerm(Term term) {
 std::string Constraint::toString() const {
 	std::ostringstream os;
 	// TODO: make symbols a static variable
-	const std::string symbols[6] = { "<", "<=", ">", ">=", "=", "!=" };
+	const std::string symbols[4] = {"", "<=", ">=", "="};
 	for (TermList::const_iterator it = terms.begin(); it != terms.end(); ++it) {
 		if (it != terms.begin()) {
 			os << "+";
