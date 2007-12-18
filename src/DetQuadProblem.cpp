@@ -38,7 +38,7 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 	Constraint c2 = Constraint();
 	for (int i = 0; i < n; ++i) {
 		std::ostringstream os;
-		os << "X_" << i;
+		os << "X_"<< i;
 		VariableFloat * var = new VariableFloat(i+1, os.str(), lowerBound, upperBound);
 		lp.addVariable(var);
 		c1.addTerm(*new Term(var, 1));
@@ -53,7 +53,36 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 	lp.addConstraint(c1);
 	lp.addConstraint(c2);
 
-	// TODO: Yi sum equals to K
+	// Yi sum equals to K
+	Constraint c3 = Constraint();
+	// epsilon * Yi <= Xi <= delta * Yi
+	for (int i = 0; i < n; ++i) {
+		Constraint c1 = Constraint();
+		Constraint c2 = Constraint();
+
+		std::ostringstream os;
+		os << "Y_"<< i;
+		VariableBool * var = new VariableBool(n+i+1, os.str());
+		lp.addVariable(var);
+		
+		c1.addTerm(*new Term(var, ((VariableFloat *)lp.getVariables()[i])->getLowerBound()));
+		c1.addTerm(*new Term(lp.getVariables()[i], -1));
+		c1.setOperator(Constraint::cLE);
+		c1.setBound(0);
+		
+		c2.addTerm(*new Term(var, ((VariableFloat *)lp.getVariables()[i])->getUpperBound()));
+		c2.addTerm(*new Term(lp.getVariables()[i], -1));
+		c2.setOperator(Constraint::cGE);
+		c2.setBound(0);
+		
+		c3.addTerm(*new Term(var, 1));
+		
+		lp.addConstraint(c1);
+		lp.addConstraint(c2);
+	}
+	c3.setOperator(Constraint::cEQ);
+	c3.setBound(k);
+	lp.addConstraint(c3);
 
 	// Linearization constraints
 	for (int i = 0; i < n; ++i) {
@@ -70,8 +99,8 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 			 */
 			// Adding the c_ij variables
 			std::ostringstream os;
-			os << "C_" << i << "," << j;
-			VariableFloat * var = new VariableFloat(n+i+j+1, os.str(), lowerBound, upperBound);
+			os << "C_"<< i << ","<< j;
+			VariableFloat * var = new VariableFloat(2*n+i+j+1, os.str(), lowerBound, upperBound);
 			lp.addVariable(var);
 			obj.addTerm(*new Term(var, sigma[i][j]));
 			// cij - xi <= 0
@@ -81,7 +110,7 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 			c1.setBound(0);
 			lp.addConstraint(c1);
 			// cij - cj <= 0
-			if(i != j) {
+			if (i != j) {
 				c2.addTerm(*new Term(var, 1.0));
 				c2.addTerm(*new Term(lp.getVariables()[j], -1.0));
 				c2.setOperator(Constraint::cLE);
@@ -90,7 +119,7 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 			}
 			// cij - ci - cj >= -1
 			c3.addTerm(*new Term(var, 1.0));
-			if(i != j) {
+			if (i != j) {
 				c3.addTerm(*new Term(lp.getVariables()[i], -1.0));
 				c3.addTerm(*new Term(lp.getVariables()[j], -1.0));
 			} else {

@@ -7,6 +7,10 @@ int Variable::getPosition() const {
 	return position;
 }
 
+bool Variable::isBinary() const {
+	return false;
+}
+
 std::string Variable::getName() const {
 	return name;
 }
@@ -20,7 +24,7 @@ char * Variable::getNameToChar() const {
 }
 
 std::string Variable::toString() const {
-	return "";
+	return name;
 }
 
 void Variable::print() const {
