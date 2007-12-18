@@ -14,6 +14,10 @@ void Solution::addVariable(float var) {
 	variable_x.push_back(var);
 }
 
+void Solution::setZ(float z) {
+	cost_z = z;
+}
+
 std::string Solution::toString() const {
 	std::ostringstream os;
 	os << "Solution: {";

@@ -11,6 +11,10 @@ Objective::Objective(bool minimize) :
 Objective::~Objective() {
 }
 
+bool Objective::isMinimize() const {
+	return minimize;
+}
+
 std::list<Term> Objective::getTerms() const {
 	return terms;
 }

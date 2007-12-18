@@ -11,6 +11,10 @@ float Term::getCoeff() const {
 	return coeff;
 }
 
+Variable Term::getVariable() const {
+	return *var;
+}
+
 std::string Term::toString() const {
 	std::ostringstream os;
 	os << coeff << "*"<< *var;

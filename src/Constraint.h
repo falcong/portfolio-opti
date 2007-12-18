@@ -17,12 +17,9 @@ private:
 	std::list<Term> terms;
 
 public:
-	static const int L = 0;
-	static const int LE = 1;
-	static const int G = 2;
-	static const int GE = 3;
-	static const int EQ = 4;
-	static const int NE = 5;
+	static const int cLE = 1;
+	static const int cGE = 2;
+	static const int cEQ = 3;
 
 	Constraint();
 	virtual ~Constraint();

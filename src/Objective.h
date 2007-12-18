@@ -21,6 +21,8 @@ public:
 	Objective(bool minimize);
 	virtual ~Objective();
 	
+	virtual bool isMinimize() const;
+	
 	virtual std::list<Term> getTerms() const;
 	virtual void addTerm(Term term);
 	

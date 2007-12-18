@@ -15,6 +15,7 @@
 #include "algo/Algo.h"
 #include "algo/SimulatedAnnealing.h"
 #include "Solution.h"
+#include "solver/LpsolveAdaptater.h"
 
 typedef std::vector<float> vf;
 typedef std::vector< std::vector<float> > vvf;
@@ -26,12 +27,16 @@ int main(void) {
 
 	dqp->print();
 	LinearProblem lp = dqp->getLinearProblem();
-	//lp.print();
+	lp.print();
 	
-	Algo * algo = new SimulatedAnnealing();
-	InitialSolver * is = new NaiveAlgorithm();
-	Solution sol = algo->solve(*dqp, is);
-	sol.print();
+	//Algo * algo = new SimulatedAnnealing();
+	//InitialSolver * is = new NaiveAlgorithm();
+	// TODO bug Solution sol = algo->solve(*dqp, is);
+	//sol.print();
 
+	LpsolveAdaptater * la = new LpsolveAdaptater();
+	Solution sol = la->getSolution(&lp);
+	//sol.print();
+	
 	return EXIT_SUCCESS;
 }

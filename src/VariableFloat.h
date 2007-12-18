@@ -11,9 +11,9 @@ class VariableFloat : public Variable {
 private:
 	float lowerBound;
 	float upperBound;
-	
 public:
-	VariableFloat(float lowerb, float upperb);
+	VariableFloat(int position, float lowerb, float upperb);
+	VariableFloat(int position, std::string name, float lowerb, float upperb);
 	virtual ~VariableFloat();
 	
 	virtual float getLowerBound() const;
