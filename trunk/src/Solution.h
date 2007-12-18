@@ -21,6 +21,8 @@ public:
 	virtual std::list<float> getVariables() const;
 	virtual void addVariable(float var);
 	
+	virtual void setZ(float z);
+	
 	friend std::ostream& operator<<(std::ostream& os, const Solution& s) {
 		return os << s.toString();
 	};

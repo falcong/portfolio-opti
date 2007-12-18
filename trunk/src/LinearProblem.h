@@ -31,6 +31,7 @@ public:
 	virtual void addConstraint(Constraint constraint);
 	virtual std::vector<Constraint> getConstraints() const;
 
+	virtual Objective getObjective() const;
 	virtual void setObjective(Objective &objective);
 	
 	virtual std::string toString() const;

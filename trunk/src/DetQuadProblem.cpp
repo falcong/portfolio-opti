@@ -18,7 +18,7 @@ float DetQuadProblem::objectiveFunction(Solution sol) const {
 }
 
 Solution DetQuadProblem::getNeighbour(Solution x, int size) const {
-	// TODO: not implemented
+	// TODO change size stock in the selection
 	return x;
 }
 
@@ -37,14 +37,14 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 	Constraint c1 = Constraint();
 	Constraint c2 = Constraint();
 	for (int i = 0; i < n; ++i) {
-		VariableFloat * var = new VariableFloat(lowerBound, upperBound);
+		VariableFloat * var = new VariableFloat(i, lowerBound, upperBound);
 		lp.addVariable(var);
 		c1.addTerm(*new Term(var, 1));
 		c2.addTerm(*new Term(var, mu[i]));
 	}
-	c1.setOperator(Constraint::EQ);
+	c1.setOperator(Constraint::cEQ);
 	c1.setBound(1);
-	c2.setOperator(Constraint::GE);
+	c2.setOperator(Constraint::cGE);
 	c2.setBound(rho);
 
 	lp.addConstraint(c1);
@@ -58,29 +58,29 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 			Constraint c1 = Constraint();
 			Constraint c2 = Constraint();
 			Constraint c3 = Constraint();
-			c1.setOperator(Constraint::LE);
-			c2.setOperator(Constraint::LE);
-			c3.setOperator(Constraint::GE);
+			c1.setOperator(Constraint::cLE);
+			c2.setOperator(Constraint::cLE);
+			c3.setOperator(Constraint::cGE);
 
 			/* TODO: the access to the variables is higly reliable on the order
 			 * the first n variables must be the x_i, beware of the y_i
 			 */
 			// Adding the c_ij variables
-			VariableFloat * var = new VariableFloat(lowerBound, upperBound);
+			VariableFloat * var = new VariableFloat(n+i+j, lowerBound, upperBound);
 			lp.addVariable(var);
 			obj.addTerm(*new Term(var, sigma[i][j]));
 			// cij - xi <= 0
 			c1.addTerm(*new Term(lp.getVariables()[i], -1.0));
-			c1.setOperator(Constraint::LE);
+			c1.setOperator(Constraint::cLE);
 			c1.setBound(0);
 			// cij - cj <= 0
 			c2.addTerm(*new Term(lp.getVariables()[j], -1.0));
-			c2.setOperator(Constraint::LE);
+			c2.setOperator(Constraint::cLE);
 			c2.setBound(0);
 			// cij - ci - cj >= -1
 			c3.addTerm(*new Term(lp.getVariables()[i], -1.0));
 			c3.addTerm(*new Term(lp.getVariables()[j], -1.0));
-			c3.setOperator(Constraint::GE);
+			c3.setOperator(Constraint::cGE);
 			c3.setBound(-1);
 
 			lp.addConstraint(c1);

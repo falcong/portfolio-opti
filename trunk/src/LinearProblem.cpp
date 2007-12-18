@@ -35,6 +35,10 @@ std::vector<Constraint> LinearProblem::getConstraints() const {
 	return constraints;
 }
 
+Objective LinearProblem::getObjective() const {
+	return objective;
+}
+
 void LinearProblem::setObjective(Objective &objective) {
 	this->objective = objective;
 }

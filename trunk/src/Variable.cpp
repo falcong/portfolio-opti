@@ -3,6 +3,14 @@
 Variable::~Variable() {
 }
 
+int Variable::getPosition() const {
+	return position;
+}
+
+std::string Variable::getName() const {
+	return name;
+}
+
 std::string Variable::toString() const {
 	return "";
 }

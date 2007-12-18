@@ -43,7 +43,7 @@ DetQuadProblem* FileParser::parseDetModel(std::string filepath,
 				variances.push_back(variance);
 				dqp->getCovariances()[current][current] = variance;
 				// TODO this is hardcoding the lower and upper bound
-				var = new VariableFloat(0,1);
+				var = new VariableFloat(current, 0,1);
 				obj.addTerm(*new Term(var, variance));
 				dqp->addVariable(var);
 

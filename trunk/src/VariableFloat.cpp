@@ -1,7 +1,14 @@
 #include "VariableFloat.h"
 
-VariableFloat::VariableFloat(float lowerb, float upperb) :
+VariableFloat::VariableFloat(int position, float lowerb, float upperb) :
 	lowerBound(lowerb), upperBound(upperb) {
+	Variable::position = position;
+}
+
+VariableFloat::VariableFloat(int position, std::string name, float lowerb, float upperb) :
+	lowerBound(lowerb), upperBound(upperb) {
+	Variable::position = position;
+	Variable::name = name;
 }
 
 VariableFloat::~VariableFloat() {
