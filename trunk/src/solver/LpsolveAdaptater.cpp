@@ -37,7 +37,7 @@ Solution LpsolveAdaptater::getSolution(LinearProblem * lp) {
 			row[j] = ((Term)*it).getCoeff();
 		}
 		// WARNING the Consraint uses the same operator values than in lp_lib.h
-		if (!add_constraintex(lprec, i, row, col, c.getOperator(), c.getBound())) {
+		if (!add_constraintex(lprec, j, row, col, c.getOperator(), c.getBound())) {
 			// TODO raise an exception
 		}
 	}
