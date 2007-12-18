@@ -14,6 +14,7 @@ public:
 	virtual ~Variable();
 
 	virtual int getPosition() const;
+	virtual bool isBinary() const;
 	
 	virtual std::string getName() const;
 	virtual char * getNameToChar() const; 

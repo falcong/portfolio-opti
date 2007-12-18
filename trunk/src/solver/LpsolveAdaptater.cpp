@@ -17,7 +17,11 @@ Solution LpsolveAdaptater::getSolution(LinearProblem * lp) {
 
 	/* set variables name to ease debugging */
 	for (int i = 0; i < (int)lp->getVariables().size(); ++i) {
-		set_col_name(lprec, i+1, (*(lp->getVariables())[i]).getNameToChar());
+		Variable * var = (lp->getVariables())[i];
+		set_col_name(lprec, i+1, var->getNameToChar());
+		if(var->isBinary()) {
+			 set_binary(lprec, i+1, TRUE);
+		}
 	}
 
 	/* to build the model faster when adding constraints one at a time */

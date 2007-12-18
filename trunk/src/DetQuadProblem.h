@@ -13,6 +13,7 @@
 #include "Term.h"
 #include "Variable.h"
 #include "VariableFloat.h"
+#include "VariableBool.h"
 #include "Stock.h"
 
 class DetQuadProblem : public Problem {
