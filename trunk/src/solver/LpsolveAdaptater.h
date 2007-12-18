@@ -4,6 +4,10 @@
 #include "lpsolve/lp_lib.h"
 #include <cmath>
 
+#include <string>
+#include <iostream>
+#include <sstream>
+
 #include "Solver.h"
 #include "../Solution.h"
 #include "../LinearProblem.h"

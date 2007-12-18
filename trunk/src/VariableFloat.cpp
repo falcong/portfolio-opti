@@ -24,6 +24,6 @@ float VariableFloat::getUpperBound() const {
 
 std::string VariableFloat::toString() const {
 	std::ostringstream os;
-	os << "["<< lowerBound << ";"<< upperBound << "]";
+	os << Variable::name; // << "["<< lowerBound << ";"<< upperBound << "]";
 	return os.str();
 }
