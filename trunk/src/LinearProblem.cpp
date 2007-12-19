@@ -15,13 +15,19 @@ float LinearProblem::objectiveFunction(Solution sol) const {
 }
 
 Solution LinearProblem::getNeighbour(Solution x, int size) const {
-	// TODO randomly exchange the value of two X_i,X_j variables and Y_i, Y_j
+	// TODO randomly exchange the value of size+1 Y_i, Y_j variables
 	Random r = Random();
-	int xi, xj;
-	
-	while(true) {
-		std::vector<double> v = r.Random::getrand_numbers(0, n, 1, 2);
-		if(variables[v[0]]){}
+	int changed = 0;
+
+	while (changed < size) {
+		std::vector<double> v = r.Random::getrand_numbers(n, 2*n, 1, 2);
+		float var0 = x.getVariables()[(int)v[0]];
+		float var1 = x.getVariables()[(int)v[1]];
+		if (var0+var1 == 1) {
+			x.changeVariable((int)v[0], var1);
+			x.changeVariable((int)v[1], var0);
+			++changed;
+		}
 	}
 	return x;
 }
@@ -72,7 +78,7 @@ std::string LinearProblem::toString() const {
 	os << objective << std::endl;
 	os << (int)variables.size() << " Variables:";
 	for (int i = 0; i != (int)variables.size(); ++i) {
-		os << variables[i]->getPosition() << ":" << *(variables[i])<< ", ";
+		os << variables[i]->getPosition() << ":"<< *(variables[i])<< ", ";
 	}
 	os << std::endl << (int)constraints.size() << " Constraits:"<< std::endl;
 	for (int i = 0; i != (int)constraints.size(); ++i) {

@@ -14,7 +14,18 @@ DetQuadProblem::~DetQuadProblem() {
 }
 
 float DetQuadProblem::objectiveFunction(Solution sol) const {
-	return objective.result(sol);
+	float risk = 0.0;
+	for (int i = 0; i < n; ++i) {
+		for (int j = i; j < n; ++j) {
+			if (i == j) {
+				risk += sol.getVariables()[i] * sol.getVariables()[j]* sigma[i][j];
+			} else {
+				risk += 2 * sol.getVariables()[i]* sol.getVariables()[j]* sigma[i][j];
+			}
+		}
+	}
+	return risk;
+	//return objective.result(sol);
 }
 
 Solution DetQuadProblem::getNeighbour(Solution x, int size) const {
@@ -31,7 +42,7 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 	LinearProblem lp = LinearProblem(n, k, rho);
 	Objective obj = Objective();
 	int global_pos = 1;
-	
+
 	// Xi sum equals to 1, and Sum of mui * Xi >= rho
 	const float lowerBound = 0;
 	const float upperBound = 1;
@@ -135,6 +146,139 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 	return lp;
 }
 
+// TODO refactoring needed: this is copy pasted from above
+LinearProblem DetQuadProblem::getSimpleLinearProblem() const {
+	LinearProblem lp = LinearProblem(n, k, rho);
+	Objective obj = Objective();
+	int global_pos = 1;
+
+	// Xi sum equals to 1, and Sum of mui * Xi >= rho
+	const float lowerBound = 0;
+	const float upperBound = 1;
+	Constraint c1 = Constraint();
+	Constraint c2 = Constraint();
+	for (int i = 0; i < n; ++i) {
+		std::ostringstream os;
+		os << "X_"<< i;
+		VariableFloat * var = new VariableFloat(global_pos++, os.str(), lowerBound, upperBound);
+		lp.addVariable(var);
+		c1.addTerm(*new Term(var, 1));
+		c2.addTerm(*new Term(var, mu[i]));
+	}
+	c1.setOperator(Constraint::cEQ);
+	// TODO harcoded total stock ratio
+	c1.setBound(1);
+	c2.setOperator(Constraint::cGE);
+	c2.setBound(rho);
+
+	lp.addConstraint(c1);
+	lp.addConstraint(c2);
+
+	// Yi sum equals to K
+	Constraint c3 = Constraint();
+	// epsilon * Yi <= Xi <= delta * Yi
+	for (int i = 0; i < n; ++i) {
+		Constraint c1 = Constraint();
+		Constraint c2 = Constraint();
+
+		std::ostringstream os;
+		os << "Y_"<< i;
+		VariableBool * var = new VariableBool(global_pos++, os.str());
+		lp.addVariable(var);
+
+		c1.addTerm(*new Term(var, ((VariableFloat *)lp.getVariables()[i])->getLowerBound()));
+		c1.addTerm(*new Term(lp.getVariables()[i], -1));
+		c1.setOperator(Constraint::cLE);
+		c1.setBound(0);
+
+		c2.addTerm(*new Term(var, ((VariableFloat *)lp.getVariables()[i])->getUpperBound()));
+		c2.addTerm(*new Term(lp.getVariables()[i], -1));
+		c2.setOperator(Constraint::cGE);
+		c2.setBound(0);
+
+		c3.addTerm(*new Term(var, 1));
+
+		lp.addConstraint(c1);
+		lp.addConstraint(c2);
+	}
+	c3.setOperator(Constraint::cEQ);
+	c3.setBound(k);
+	lp.addConstraint(c3);
+
+	lp.setObjective(obj);
+	return lp;
+}
+
+LinearProblem DetQuadProblem::getFixedLP(Solution sol) const {
+	LinearProblem lp = LinearProblem(n, k, rho);
+	Objective obj = Objective();
+	int global_pos = 1;
+
+	const float lowerBound = 0;
+	const float upperBound = 1;
+	Constraint c1 = Constraint();
+	Constraint c2 = Constraint();
+
+	for (int i = 0; i < n; ++i) {
+		std::ostringstream os;
+		os << "X_"<< i;
+		VariableFloat * var = new VariableFloat(global_pos++, os.str(), lowerBound, upperBound);
+		lp.addVariable(var);
+		c1.addTerm(*new Term(var, 1));
+		c2.addTerm(*new Term(var, mu[i]));
+	}
+	c1.setOperator(Constraint::cEQ);
+	// TODO harcoded total stock ratio
+	c1.setBound(1);
+	c2.setOperator(Constraint::cGE);
+	c2.setBound(rho);
+
+	lp.addConstraint(c1);
+	lp.addConstraint(c2);
+
+	// Yi sum equals to K
+	Constraint c3 = Constraint();
+	// epsilon * Yi <= Xi <= delta * Yi
+	for (int i = 0; i < n; ++i) {
+		Constraint c1 = Constraint();
+		Constraint c2 = Constraint();
+
+		std::ostringstream os;
+		os << "Y_"<< i;
+		VariableBool * var = new VariableBool(global_pos++, os.str());
+		lp.addVariable(var);
+
+		if (sol.getVariables()[n+i] != 0) {
+			c1.addTerm(*new Term(var, ((VariableFloat *)lp.getVariables()[i])->getLowerBound()));
+		} else {
+			c1.addTerm(*new Term(var, 0));
+		}
+		c1.addTerm(*new Term(lp.getVariables()[i], -1));
+		c1.setOperator(Constraint::cLE);
+		c1.setBound(0);
+
+		if (sol.getVariables()[n+i] != 0) {
+			c2.addTerm(*new Term(var, ((VariableFloat *)lp.getVariables()[i])->getUpperBound()));
+		} else {
+			c2.addTerm(*new Term(var, 0));
+		}
+		c2.addTerm(*new Term(lp.getVariables()[i], -1));
+		c2.setOperator(Constraint::cGE);
+		c2.setBound(0);
+
+		c3.addTerm(*new Term(var, 1));
+
+		lp.addConstraint(c1);
+		lp.addConstraint(c2);
+	}
+	c3.setOperator(Constraint::cEQ);
+	c3.setBound(k);
+	lp.addConstraint(c3);
+
+	lp.setObjective(obj);
+	return lp;
+}
+
 Objective DetQuadProblem::getObjective() {
 	return objective;
 }
@@ -174,7 +318,7 @@ float DetQuadProblem::getRho() const {
 std::string DetQuadProblem::toString() const {
 	std::ostringstream os;
 	os << "DetQuad Problem:"<< std::endl;
-	
+
 	os << std::endl << objective << std::endl;
 	os << (int)variables.size() << " Variables:";
 	for (int i = 0; i != (int)variables.size(); ++i) {

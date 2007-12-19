@@ -13,7 +13,8 @@ public:
 	SimulatedAnnealing();
 	virtual ~SimulatedAnnealing();
 
-	virtual Solution solve(LinearProblem pb, Solver * is) const;
+	virtual Solution solve(LinearProblem pb, Solver * s) const;
+	virtual Solution solve(DetQuadProblem pb, Solver * s) const;
 };
 
 #endif /*SIMULATEDANNEALING_H_*/

@@ -36,16 +36,18 @@ public:
 	virtual void getReglage(float temp) const;
 
 	LinearProblem getLinearProblem() const;
-	
+	LinearProblem getSimpleLinearProblem() const;
+	LinearProblem getFixedLP(Solution sol) const;
+
 	virtual Objective getObjective();
 	virtual void setObjective(Objective &objective);
-	
+
 	virtual void addVariable(Variable * var);
 	virtual std::vector<Variable*> getVariables() const;
-	
+
 	void addMeanValue(float mv);
 	std::vector<float> getMeanValues() const;
-	
+
 	void addCovariance(float cov);
 	std::vector< std::vector<float> > & getCovariances();
 

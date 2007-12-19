@@ -19,10 +19,10 @@ typedef std::vector< std::vector<float> > vvf;
 
 int main(void) {
 	FileParser* fp = new FileParser();
-	DetQuadProblem * dqp = fp->parseDetModel("benchmark/10.txt",
+	DetQuadProblem * dqp = fp->parseDetModel("benchmark/FTSE.txt",
 			"benchmark/SIMPLE_FE.txt");
-	LinearProblem lp = dqp->getLinearProblem();
-	
+	LinearProblem lp = dqp->getSimpleLinearProblem();
+
 #ifdef DEBUG
 	dqp->print();
 	lp.print();
@@ -30,11 +30,21 @@ int main(void) {
 
 	Algo * algo = new SimulatedAnnealing();
 	Solver * s = new LpsolveAdaptator();
-	Solution sol = s->getBestSolution(&lp);
-	
-	//std::cout << "The fucking dumb ass result "<< lp.objectiveFunction(sol) << std::endl;
-	//TODO does not work Solution sol = algo->solve(lp, s);
-	sol.print();
+	Solution sol = algo->solve(*dqp, s);
+
+	/*Solution sol = s->getAdmissibleSolution(&lp);
+	 std::cout << "Risk = "<< dqp->objectiveFunction(sol) << " : "
+	 << sol.toString() << std::endl;
+	 sol = lp.getNeighbour(sol, 1);
+	 lp = dqp->getFixedLP(sol);
+	 sol = s->getAdmissibleSolution(&lp);
+	 std::cout << "Risk = "<< dqp->objectiveFunction(sol) << " : "
+	 << sol.toString() << std::endl;
+	 sol = lp.getNeighbour(sol, 1);
+	 lp = dqp->getFixedLP(sol);
+	 sol = s->getAdmissibleSolution(&lp);
+	 std::cout << "Risk = "<< dqp->objectiveFunction(sol) << " : "
+	 << sol.toString() << std::endl;*/
 
 	return EXIT_SUCCESS;
 }

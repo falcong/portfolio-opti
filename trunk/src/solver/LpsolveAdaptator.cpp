@@ -123,7 +123,10 @@ Solution LpsolveAdaptator::getSolution(lprec * lp) {
 	Solution sol = Solution();
 	REAL row[get_Norig_columns(lp)];
 #ifdef DEBUG
+	set_verbose(lp, NORMAL);
 	write_LP(lp, stdout);
+#else
+	set_verbose(lp, CRITICAL);
 #endif
 	solve(lp);
 
@@ -131,8 +134,11 @@ Solution LpsolveAdaptator::getSolution(lprec * lp) {
 	sol.setZ(get_objective(lp));
 	get_variables(lp, row);
 
-	for(int j = 0; j < get_Norig_columns(lp); j++)
+#ifdef DEBUG
+	for(int j = 0; j < get_Norig_columns(lp); j++) {
 	   printf("%s: %f\n", get_col_name(lp, j + 1), row[j]);
+	}
+#endif
 	
 	for (int i = 0; i < get_Norig_columns(lp); i++) {
 		double var_value = (double)row[i];
