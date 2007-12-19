@@ -23,14 +23,16 @@ void Objective::addTerm(Term term) {
 	terms.push_back(term);
 }
 
+
+// TODO I really doubt this method works ...
 float Objective::result(Solution sol) const {
 	float result = 0.0;
 	
-	TermList::const_iterator it2 = terms.begin();
-	for (FloatList::const_iterator it = sol.getVariables().begin();
-		it != sol.getVariables().end() && it2 != terms.end();
-		++it, ++it2) {
-		result += ((Term)*it2).getCoeff() * (float)*it;
+	for(TermList::const_iterator it = terms.begin(); it != terms.end(); ++it) {
+		Variable var = ((Term)*it).getVariable();
+		float coef =  ((Term)*it).getCoeff();
+		float var_value = sol.getVariables()[var.getPosition()-1];
+		result += coef * var_value;
 	}
 	return result;
 }

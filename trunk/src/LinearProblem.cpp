@@ -15,7 +15,14 @@ float LinearProblem::objectiveFunction(Solution sol) const {
 }
 
 Solution LinearProblem::getNeighbour(Solution x, int size) const {
-	// TODO: not implemented
+	// TODO randomly exchange the value of two X_i,X_j variables and Y_i, Y_j
+	Random r = Random();
+	int xi, xj;
+	
+	while(true) {
+		std::vector<double> v = r.Random::getrand_numbers(0, n, 1, 2);
+		if(variables[v[0]]){}
+	}
 	return x;
 }
 
@@ -65,7 +72,7 @@ std::string LinearProblem::toString() const {
 	os << objective << std::endl;
 	os << (int)variables.size() << " Variables:";
 	for (int i = 0; i != (int)variables.size(); ++i) {
-		os << *(variables[i])<< ", ";
+		os << variables[i]->getPosition() << ":" << *(variables[i])<< ", ";
 	}
 	os << std::endl << (int)constraints.size() << " Constraits:"<< std::endl;
 	for (int i = 0; i != (int)constraints.size(); ++i) {

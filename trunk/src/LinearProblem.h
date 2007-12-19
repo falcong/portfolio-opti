@@ -10,6 +10,8 @@
 #include "Variable.h"
 #include "VariableFloat.h"
 
+#include "util/Random.h"
+
 class LinearProblem : public Problem {
 private:
 	Objective objective;

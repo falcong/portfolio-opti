@@ -131,8 +131,12 @@ Solution LpsolveAdaptator::getSolution(lprec * lp) {
 	sol.setZ(get_objective(lp));
 	get_variables(lp, row);
 
-	for (int i = 0; i < get_Norig_columns(lp); ++i) {
-		sol.addVariable(row[i]);
+	for(int j = 0; j < get_Norig_columns(lp); j++)
+	   printf("%s: %f\n", get_col_name(lp, j + 1), row[j]);
+	
+	for (int i = 0; i < get_Norig_columns(lp); i++) {
+		double var_value = (double)row[i];
+		sol.addVariable(var_value);
 	}
 
 	delete_lp(lp);
