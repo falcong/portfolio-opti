@@ -16,9 +16,12 @@ private:
 	std::vector<Constraint> constraints;
 	// Using pointers to ensure dynamic mapping of virtual functions to the real class
 	std::vector<Variable*> variables;
+	int n, k;
+	float rho;
 
 public:
 	LinearProblem();
+	LinearProblem(int nbTotalStocks, int stockSelSize, float yield);
 	virtual ~LinearProblem();
 
 	virtual float objectiveFunction(Solution sol) const;
@@ -28,6 +31,10 @@ public:
 	virtual void addVariable(Variable * var);
 	virtual std::vector<Variable*> getVariables() const;
 
+	int getN() const;
+	int getK() const;
+	float getRho() const;
+	
 	virtual void addConstraint(Constraint constraint);
 	virtual std::vector<Constraint> getConstraints() const;
 

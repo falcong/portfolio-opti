@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "Algo.h"
+#include "../solver/Solver.h"
 
 class SimulatedAnnealing : public Algo {
 private:
@@ -12,7 +13,7 @@ public:
 	SimulatedAnnealing();
 	virtual ~SimulatedAnnealing();
 
-	virtual Solution solve(DetQuadProblem pb, InitialSolver * is) const;
+	virtual Solution solve(LinearProblem pb, Solver * is) const;
 };
 
 #endif /*SIMULATEDANNEALING_H_*/

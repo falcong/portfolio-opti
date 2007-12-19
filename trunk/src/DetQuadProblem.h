@@ -11,10 +11,8 @@
 #include "Objective.h"
 #include "Constraint.h"
 #include "Term.h"
-#include "Variable.h"
 #include "VariableFloat.h"
 #include "VariableBool.h"
-#include "Stock.h"
 
 class DetQuadProblem : public Problem {
 private:
@@ -24,7 +22,6 @@ private:
 	int n;
 	int k;
 	float rho;
-	std::vector<Stock> stocks;
 	std::vector<float> mu;
 	std::vector<float> epsilon;
 	std::vector<float> delta;
@@ -51,10 +48,7 @@ public:
 	
 	void addCovariance(float cov);
 	std::vector< std::vector<float> > & getCovariances();
-	
-	void addStock(Stock stock);
-	std::vector<Stock> getStocks() const;
-	
+
 	virtual int getK() const;
 	virtual float getRho() const;
 

@@ -3,7 +3,7 @@
 
 #include "../DetQuadProblem.h"
 #include "../Solution.h"
-#include "InitialSolver.h"
+#include "../solver/Solver.h"
 
 class Algo {
 public:
@@ -11,7 +11,7 @@ public:
 	
 	// TODO: I don't know how to have an abstract type as a parameter
 	// virtual Solution solve(Problem pb) const = 0;
-	virtual Solution solve(DetQuadProblem pb, InitialSolver * is) const = 0;
+	virtual Solution solve(LinearProblem pb, Solver * is) const = 0;
 };
 
 #endif /*ALGO_H_*/

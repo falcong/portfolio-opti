@@ -6,8 +6,9 @@ SimulatedAnnealing::SimulatedAnnealing() {
 SimulatedAnnealing::~SimulatedAnnealing() {
 }
 
-Solution SimulatedAnnealing::solve(DetQuadProblem pb, InitialSolver * is) const {
-	Solution sol = is->getInitialSolution(pb, 1.0);
+
+Solution SimulatedAnnealing::solve(LinearProblem pb, Solver * is) const {
+	Solution sol = is->getAdmissibleSolution(&pb);
 	float coolingFactor = 0.85, temp = 10, acceptRate = 0.0, variation = 0.0;
 
 	for (int i = 0; acceptRate < getAdaptativeRate(variation, temp) && i < pb.getK()
