@@ -30,7 +30,8 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 	// TODO: not finished	
 	LinearProblem lp = LinearProblem(n, k, rho);
 	Objective obj = Objective();
-
+	int global_pos = 1;
+	
 	// Xi sum equals to 1, and Sum of mui * Xi >= rho
 	const float lowerBound = 0;
 	const float upperBound = 1;
@@ -39,7 +40,7 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 	for (int i = 0; i < n; ++i) {
 		std::ostringstream os;
 		os << "X_"<< i;
-		VariableFloat * var = new VariableFloat(i+1, os.str(), lowerBound, upperBound);
+		VariableFloat * var = new VariableFloat(global_pos++, os.str(), lowerBound, upperBound);
 		lp.addVariable(var);
 		c1.addTerm(*new Term(var, 1));
 		c2.addTerm(*new Term(var, mu[i]));
@@ -62,7 +63,7 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 
 		std::ostringstream os;
 		os << "Y_"<< i;
-		VariableBool * var = new VariableBool(n+i+1, os.str());
+		VariableBool * var = new VariableBool(global_pos++, os.str());
 		lp.addVariable(var);
 
 		c1.addTerm(*new Term(var, ((VariableFloat *)lp.getVariables()[i])->getLowerBound()));
@@ -86,7 +87,7 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 
 	// Linearization constraints
 	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < n; ++j) {
+		for (int j = i; j < n; ++j) {
 			Constraint c1 = Constraint();
 			Constraint c2 = Constraint();
 			Constraint c3 = Constraint();
@@ -100,9 +101,9 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 			// Adding the c_ij variables
 			std::ostringstream os;
 			os << "C_"<< i << ","<< j;
-			VariableFloat * var = new VariableFloat(2*n+i+j+1, os.str(), lowerBound, upperBound);
+			VariableFloat * var = new VariableFloat(global_pos++, os.str(), lowerBound, upperBound);
 			lp.addVariable(var);
-			obj.addTerm(*new Term(var, sigma[i][j]));
+			obj.addTerm(*new Term(var, (i == j) ? sigma[i][j] : 2*sigma[i][j]));
 			// cij - xi <= 0
 			c1.addTerm(*new Term(var, 1.0));
 			c1.addTerm(*new Term(lp.getVariables()[i], -1.0));

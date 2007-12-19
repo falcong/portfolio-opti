@@ -6,7 +6,6 @@ SimulatedAnnealing::SimulatedAnnealing() {
 SimulatedAnnealing::~SimulatedAnnealing() {
 }
 
-
 Solution SimulatedAnnealing::solve(LinearProblem pb, Solver * is) const {
 	Solution sol = is->getAdmissibleSolution(&pb);
 	float coolingFactor = 0.85, temp = 10, acceptRate = 0.0, variation = 0.0;

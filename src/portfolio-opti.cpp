@@ -19,7 +19,7 @@ typedef std::vector< std::vector<float> > vvf;
 
 int main(void) {
 	FileParser* fp = new FileParser();
-	DetQuadProblem * dqp = fp->parseDetModel("benchmark/SIMPLE.txt",
+	DetQuadProblem * dqp = fp->parseDetModel("benchmark/10.txt",
 			"benchmark/SIMPLE_FE.txt");
 	LinearProblem lp = dqp->getLinearProblem();
 	
@@ -30,8 +30,11 @@ int main(void) {
 
 	Algo * algo = new SimulatedAnnealing();
 	Solver * s = new LpsolveAdaptator();
+	Solution sol = s->getBestSolution(&lp);
+	
+	//std::cout << "The fucking dumb ass result "<< lp.objectiveFunction(sol) << std::endl;
 	//TODO does not work Solution sol = algo->solve(lp, s);
-	//sol.print();
+	sol.print();
 
 	return EXIT_SUCCESS;
 }

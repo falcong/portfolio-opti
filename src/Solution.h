@@ -1,24 +1,22 @@
 #ifndef SOLUTION_H_
 #define SOLUTION_H_ 
 
-#include <list>
+#include <vector>
 
 #include "Variable.h"
 #include "VariableFloat.h"
 
-typedef const std::list<float> FloatList;
-
 class Solution {
 private:
 	// TODO: give better names to variables
-	std::list<float> variable_x;
+	std::vector<float> variable_x;
 	float cost_z;
 
 public:
 	Solution();
 	virtual ~Solution();
 	
-	virtual std::list<float> getVariables() const;
+	virtual std::vector<float> getVariables() const;
 	virtual void addVariable(float var);
 	
 	virtual void setZ(float z);

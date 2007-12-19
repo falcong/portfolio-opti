@@ -6,7 +6,7 @@ Solution::Solution() {
 Solution::~Solution() {
 }
 
-std::list<float> Solution::getVariables() const {
+std::vector<float> Solution::getVariables() const {
 	return variable_x;
 }
 
@@ -21,11 +21,11 @@ void Solution::setZ(float z) {
 std::string Solution::toString() const {
 	std::ostringstream os;
 	os << "Solution: {";
-	for (FloatList::const_iterator it = variable_x.begin(); it != variable_x.end(); ++it) {
-		if (it != variable_x.begin()) {
+	for(int i = 0; i < (int)variable_x.size(); ++i) {
+		if (i != 0) {
 			os << ", ";
 		}
-		os << *it ;
+		os << variable_x[i];
 	}
 	os << "}";
 	return os.str();
