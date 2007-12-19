@@ -15,12 +15,13 @@ private:
 public:
 	Solution();
 	virtual ~Solution();
-	
+
 	virtual std::vector<float> getVariables() const;
 	virtual void addVariable(float var);
-	
+	virtual void changeVariable(int at, float var);
+
 	virtual void setZ(float z);
-	
+
 	friend std::ostream& operator<<(std::ostream& os, const Solution& s) {
 		return os << s.toString();
 	};

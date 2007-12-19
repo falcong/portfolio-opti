@@ -14,6 +14,12 @@ void Solution::addVariable(float var) {
 	variable_x.push_back(var);
 }
 
+void Solution::changeVariable(int at, float var) {
+	if(at < variable_x.size()) {
+		variable_x[at] = var;
+	}
+}
+
 void Solution::setZ(float z) {
 	cost_z = z;
 }
