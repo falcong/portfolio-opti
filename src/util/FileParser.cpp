@@ -47,9 +47,6 @@ DetQuadProblem* FileParser::parseDetModel(std::string filepath,
 				obj.addTerm(*new Term(var, variance));
 				dqp->addVariable(var);
 
-				// TODO concurrent way to build a DetQuadPb with a list of stocks;
-				dqp->addStock(*new Stock(current, meanYield, variance, 1.0/(dqp->getK()*2),1.0/(dqp->getK())));
-
 				if (++current == total) {
 					state = CORR;
 					current = 0;

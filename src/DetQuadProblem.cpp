@@ -28,7 +28,7 @@ void DetQuadProblem::getReglage(float temp) const {
 
 LinearProblem DetQuadProblem::getLinearProblem() const {
 	// TODO: not finished	
-	LinearProblem lp;
+	LinearProblem lp = LinearProblem(n, k, rho);
 	Objective obj = Objective();
 
 	// Xi sum equals to 1, and Sum of mui * Xi >= rho
@@ -64,19 +64,19 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 		os << "Y_"<< i;
 		VariableBool * var = new VariableBool(n+i+1, os.str());
 		lp.addVariable(var);
-		
+
 		c1.addTerm(*new Term(var, ((VariableFloat *)lp.getVariables()[i])->getLowerBound()));
 		c1.addTerm(*new Term(lp.getVariables()[i], -1));
 		c1.setOperator(Constraint::cLE);
 		c1.setBound(0);
-		
+
 		c2.addTerm(*new Term(var, ((VariableFloat *)lp.getVariables()[i])->getUpperBound()));
 		c2.addTerm(*new Term(lp.getVariables()[i], -1));
 		c2.setOperator(Constraint::cGE);
 		c2.setBound(0);
-		
+
 		c3.addTerm(*new Term(var, 1));
-		
+
 		lp.addConstraint(c1);
 		lp.addConstraint(c2);
 	}
@@ -162,14 +162,6 @@ std::vector< std::vector<float> > & DetQuadProblem::getCovariances() {
 	return sigma;
 }
 
-void DetQuadProblem::addStock(Stock stock) {
-	stocks.push_back(stock);
-}
-
-std::vector<Stock> DetQuadProblem::getStocks() const {
-	return stocks;
-}
-
 int DetQuadProblem::getK() const {
 	return k;
 }
@@ -181,10 +173,7 @@ float DetQuadProblem::getRho() const {
 std::string DetQuadProblem::toString() const {
 	std::ostringstream os;
 	os << "DetQuad Problem:"<< std::endl;
-	os << (int)stocks.size() << " Stocks:";
-	for (int i = 0; i != (int)stocks.size(); ++i) {
-		os << stocks[i]<< " ";
-	}
+	
 	os << std::endl << objective << std::endl;
 	os << (int)variables.size() << " Variables:";
 	for (int i = 0; i != (int)variables.size(); ++i) {

@@ -3,6 +3,10 @@
 LinearProblem::LinearProblem() {
 }
 
+LinearProblem::LinearProblem(int nbTotalStocks, int stockSelSize, float yield) :
+	n(nbTotalStocks), k(stockSelSize), rho(yield) {
+}
+
 LinearProblem::~LinearProblem() {
 }
 
@@ -25,6 +29,18 @@ void LinearProblem::addVariable(Variable * var) {
 
 std::vector<Variable*> LinearProblem::getVariables() const {
 	return variables;
+}
+
+int LinearProblem::getN() const {
+	return n;
+}
+
+int LinearProblem::getK() const {
+	return k;
+}
+
+float LinearProblem::getRho() const {
+	return rho;
 }
 
 void LinearProblem::addConstraint(Constraint constraint) {
