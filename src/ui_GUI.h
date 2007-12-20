@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'GUI.ui'
 **
-** Created: Thu Dec 20 21:25:16 2007
+** Created: Thu Dec 20 22:37:22 2007
 **      by: Qt User Interface Compiler version 4.3.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -247,6 +247,7 @@ public:
 
     doubleSpinBox_esperance = new QDoubleSpinBox(layoutWidget2);
     doubleSpinBox_esperance->setObjectName(QString::fromUtf8("doubleSpinBox_esperance"));
+    doubleSpinBox_esperance->setSingleStep(0.5);
 
     hboxLayout4->addWidget(doubleSpinBox_esperance);
 

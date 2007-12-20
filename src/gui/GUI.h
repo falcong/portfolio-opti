@@ -40,6 +40,7 @@ private:
 	QStringList instancesFiles;
 	QStringList instancesFilesFE;
 	void setMessage(QString s);
+	void updateY();
 
 	void activateAll();
 	void desactivateAll();

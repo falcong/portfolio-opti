@@ -27,7 +27,6 @@ void GUI::setDirectory(int index) {
 	} else {
 		string path = comboBox_filename->itemText(index).toLocal8Bit().constData();
 		std::cout << "open file" << path << std::endl;
-	//TODO : onpen file and handle it... see with parser
 		index--;
 		detQProblem = FileParser::parseDetModel(
 				instancesFiles.at(index).toLocal8Bit().constData(), 
@@ -98,17 +97,33 @@ void GUI::setNumberOfTitles(int nb) {
 	lineEdit_nbAvalableTitles->setText(QString::number(nb));
 	spinBox_K->setMaximum(nb);
 	tableWidget_proportionsMinMax->setColumnCount(nb);
-	//TODO put 0 / 1 by default to the min / max
+	
+	for(int i = 0; i<nb; i++) {
+		QDoubleSpinBox *s1 = new QDoubleSpinBox(), *s2 = new QDoubleSpinBox();
+		s1->setMaximum(1.0); s1->setMinimum(0.0); s1->setValue(0.0); 
+		s2->setMaximum(1.0); s2->setMinimum(0.0); s2->setValue(1.0); 
+		s1->setSingleStep(0.05); s2->setSingleStep(0.05);
+		tableWidget_proportionsMinMax->setCellWidget(0, i, s1);
+		tableWidget_proportionsMinMax->setCellWidget(1, i, s2);
+	}
 	tableWidget_resultProportions->setColumnCount(nb);
+	
 
+}
+
+void GUI::updateY() {
+	
+	//detQProblem
 }
 
 void GUI::run() {
 	char *algo_str;
-
 	int max_iter;
 	float init_temp;
 	algo = NULL;
+	
+	
+	
 	switch (tabWidget_algo->currentIndex()) {
 	case 0:
 		desactivateVeryAll();
