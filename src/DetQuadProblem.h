@@ -36,6 +36,7 @@ public:
 	virtual void getReglage(float temp) const;
 
 	LinearProblem getLinearProblem() const;
+	LinearProblem getRelaxedLinearProblem(float lambda1, float lambda2) const;
 	LinearProblem getSimpleLinearProblem() const;
 	LinearProblem getFixedLP(Solution sol) const;
 
