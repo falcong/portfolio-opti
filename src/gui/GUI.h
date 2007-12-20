@@ -6,7 +6,9 @@
 
 #include "ui_GUI.h"
 
+#include "../util/FileParser.h"
 
+using namespace std;
 
 class GUI : public QWidget, private Ui::Form
 {
@@ -26,6 +28,9 @@ public slots:
 private:
 	int k; //number of titles
 	double e; //rendement esperance
+	QStringList instancesFiles;
+	QStringList instancesFilesFE;
+	DetQuadProblem* detProblem;
 
 	void activateAll();
 	void desactivateAll();
