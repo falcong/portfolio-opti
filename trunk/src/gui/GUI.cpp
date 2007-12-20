@@ -144,13 +144,14 @@ void GUI::run() {
 	if(algo != NULL) {
 		Solution solution = algo->solve(*detQProblem, *solver);
 		vector<float> vars_x = solution.getVariables();
-		for(int i = 1; i < (int)vars_x.size(); ++i) {
+		for(int i = 0; i < (int)vars_x.size(); ++i) {
 			tableWidget_resultProportions->setCellWidget(
-					0, i-1, new QLabel(QString::number(vars_x[i])));
+					0, i, new QLabel(QString::number(vars_x[i])));
 		}
 		comboBox_filename->setEnabled(true);
 		tableWidget_resultProportions->setEnabled(true);
-		setMessage(QString("Risque obtenu : ") + QString::number(double(solution.getZ()),'g', 8));
+		cout << "z : " << solution.getZ() << endl;
+		setMessage(QString("Risque : ") + QString::number(double(solution.getZ())*100,'g', 5)+ QString("%"));
 	}
 	else {
 		activateAll();

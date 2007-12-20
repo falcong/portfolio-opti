@@ -64,6 +64,7 @@ Solution SimulatedAnnealing::solve(DetQuadProblem& pb, Solver& s) const {
 			temp = coolingFactor * temp;
 		}
 	}
+	bestSol.setZ(solRisk);
 	return bestSol;
 }
 
