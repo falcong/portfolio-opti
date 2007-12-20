@@ -8,6 +8,9 @@ GUI::GUI(QWidget *parent) {
 	setupUi(this); // this sets up GUI
 	setWindowTitle(QString("Optimisation de gestion de portefeuilles"));
 	setMessage(QString(""));
+	doubleSpinBox_esperance->setDecimals(2);
+	doubleSpinBox_esperance->setSingleStep(0.1);
+	doubleSpinBox_esperance->setSuffix(QString("%"));
 	desactivateAll();
 
 	connect( comboBox_filename, SIGNAL( activated(int) ), this, SLOT( setDirectory(int) ) );
@@ -112,8 +115,9 @@ void GUI::setNumberOfTitles(int nb) {
 }
 
 void GUI::updateY() {
-	
-	//detQProblem
+	cout << "update problem with k=" << k << " and rho=" << rho << endl;
+	detQProblem->setK(k);
+	detQProblem->setRho(rho);
 }
 
 void GUI::run() {
@@ -121,14 +125,18 @@ void GUI::run() {
 	int max_iter;
 	float init_temp;
 	algo = NULL;
+	k = spinBox_K->value();
+	rho = doubleSpinBox_esperance->value()/100.0;
 	
-	
+	updateY();
 	
 	switch (tabWidget_algo->currentIndex()) {
 	case 0:
 		desactivateVeryAll();
 		algo_str = "VNS";
 		max_iter = lineEdit_nbIterationsVNS->text().toInt();
+		if(max_iter != 0) algo = new VNS(max_iter);
+		else algo = new VNS();
 		std::cout << "nb iters : " << max_iter << std::endl;
 		break;
 	case 1:
@@ -149,12 +157,10 @@ void GUI::run() {
 		break;
 	}
 
-	k = spinBox_K->value();
-	e = doubleSpinBox_esperance->value();
 	//QTime tmax = timeEdit_maxComputation->time();
 	QString tmax = timeEdit_maxComputation->displayFormat();
 	std::cout << "run on problem with algo " << algo_str << ", K=" << k
-			<< ", esperance=" << e << ", tmax=" << tmax.toLocal8Bit().constData() << std::endl;
+			<< ", esperance=" << rho << ", tmax=" << tmax.toLocal8Bit().constData() << std::endl;
 
 	if(algo != NULL) {
 		Solution solution = algo->solve(*detQProblem, *solver);

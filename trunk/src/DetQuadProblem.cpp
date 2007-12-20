@@ -10,6 +10,23 @@ DetQuadProblem::DetQuadProblem(int nbTotalStocks, int stockSelSize, float yield)
 	}
 }
 
+DetQuadProblem::DetQuadProblem(int nbTotalStocks) :	n(nbTotalStocks) {
+	for (int i = 0; i < n; ++i) {
+		sigma.push_back(*(new std::vector<float>()));
+		for (int j = 0; j < n; ++j) {
+			sigma[i].push_back(0.0);
+		}
+	}
+}
+
+void DetQuadProblem::setRho(float r) {
+	this->rho = r;
+}
+
+void DetQuadProblem::setK(int k) {
+	this->k = k;
+}
+
 DetQuadProblem::~DetQuadProblem() {
 }
 

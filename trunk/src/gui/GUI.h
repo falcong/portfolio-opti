@@ -9,6 +9,7 @@
 #include "../util/FileParser.h"
 #include "../algo/Algo.h"
 #include "../algo/SimulatedAnnealing.h"
+#include "../algo/VNS.h"
 #include "../solver/Solver.h"
 #include "../solver/LpsolveAdaptator.h"
 #include "../Solution.h"
@@ -32,7 +33,7 @@ public slots:
 
 private:
 	int k; //number of titles
-	double e; //rendement esperance
+	double rho; //rendement esperance
 	Solver *solver;
 	Algo *algo;
 	DetQuadProblem *detQProblem;

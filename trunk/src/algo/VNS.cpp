@@ -49,5 +49,6 @@ Solution VNS::solve(DetQuadProblem& pb, Solver& s) const {
 			++i;
 		}
 	}
+	sol.setZ(min);
 	return sol;
 }
