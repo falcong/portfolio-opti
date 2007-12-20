@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'GUI.ui'
 **
-** Created: Thu Dec 20 22:37:22 2007
+** Created: Fri Dec 21 00:27:32 2007
 **      by: Qt User Interface Compiler version 4.3.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -459,7 +459,7 @@ public:
     retranslateUi(Form);
 
     modelChoice->setCurrentIndex(0);
-    tabWidget_algo->setCurrentIndex(1);
+    tabWidget_algo->setCurrentIndex(0);
     tabWidget_2->setCurrentIndex(2);
 
 
@@ -474,7 +474,7 @@ public:
      << QApplication::translate("Form", "Choisir r\303\251pertoire...", 0, QApplication::UnicodeUTF8)
     );
     lineEdit_nbIterationsVNS->setInputMask(QApplication::translate("Form", "D999999999; ", 0, QApplication::UnicodeUTF8));
-    lineEdit_nbIterationsVNS->setText(QApplication::translate("Form", "3", 0, QApplication::UnicodeUTF8));
+    lineEdit_nbIterationsVNS->setText(QString());
     label_10->setText(QApplication::translate("Form", "Nombre d'it\303\251rations :", 0, QApplication::UnicodeUTF8));
     tabWidget_algo->setTabText(tabWidget_algo->indexOf(tab), QApplication::translate("Form", "VNS", 0, QApplication::UnicodeUTF8));
     label_6->setText(QApplication::translate("Form", "Temp\303\251rature initiale :", 0, QApplication::UnicodeUTF8));

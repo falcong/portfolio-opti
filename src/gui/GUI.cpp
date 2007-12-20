@@ -99,6 +99,7 @@ void GUI::setNumberOfTitles(int nb) {
 	std::cout << "set number of titles to " << nb << std::endl;
 	lineEdit_nbAvalableTitles->setText(QString::number(nb));
 	spinBox_K->setMaximum(nb);
+	spinBox_K->setValue(nb/2);
 	tableWidget_proportionsMinMax->setColumnCount(nb);
 	
 	for(int i = 0; i<nb; i++) {
