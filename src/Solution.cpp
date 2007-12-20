@@ -45,4 +45,11 @@ void Solution::print() const {
 	std::cout << toString() << std::endl;
 }
 
-
+bool Solution::isNull() const {
+	for(int i = 0; i < (int)variable_x.size(); ++i) {
+		if(variable_x[i] != 0.0) {
+			return false;
+		}
+	}
+	return true;
+}

@@ -28,6 +28,8 @@ public:
 	virtual std::string toString() const;
 	virtual float getZ();
 	virtual void print() const;
+	
+	virtual bool isNull() const;
 };
 
 #endif /*SOLUTION_H_*/

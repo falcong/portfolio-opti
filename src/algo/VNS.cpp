@@ -22,6 +22,9 @@ Solution VNS::solve(DetQuadProblem& pb, Solver& s) const {
 
 	int i = 2;
 	Solution sol = s.getAdmissibleSolution(&lp);
+	if(sol.isNull()) {
+		return sol;
+	}
 	Solution xPrim, xSecond;
 
 	float min = pb.objectiveFunction(sol);
@@ -31,7 +34,10 @@ Solution VNS::solve(DetQuadProblem& pb, Solver& s) const {
 		xPrim = lp.getNeighbour(sol, i);
 		lp = pb.getFixedLP(xPrim);
 		xPrim = s.getBestSolution(&lp);
-		//xSecond = getOptimumLocal(pb, s, xPrim);
+		if(xPrim.isNull()) {
+			++i;
+			continue;
+		}
 
 		float risk = pb.objectiveFunction(xPrim);
 		if (risk < min) {
@@ -40,33 +46,8 @@ Solution VNS::solve(DetQuadProblem& pb, Solver& s) const {
 			i=2;
 			std::cout << "Risk = " << min << " : "<< sol.toString() << std::endl;
 		} else {
-			i++;
+			++i;
 		}
 	}
 	return sol;
-}
-
-Solution VNS::getOptimumLocal(DetQuadProblem pb, Solver& s, const Solution& sol) const {
-	Solution res = sol;
-	LinearProblem lp = pb.getFixedLP(res);
-	res = s.getAdmissibleSolution(&lp);
-
-	float maxTemp = pb.objectiveFunction(res);
-
-	Solution vTemp;
-
-	int cpt = lp.getK() * (lp.getN() - lp.getK());
-
-	for (int j = 0; j< cpt ; j++) {
-		vTemp = lp.getNeighbour(sol, 1);
-		lp = pb.getFixedLP(vTemp);
-		vTemp = s.getAdmissibleSolution(&lp);
-		if (pb.objectiveFunction(vTemp) < maxTemp) {
-			maxTemp = pb.objectiveFunction(vTemp);
-			res = vTemp;
-			j = cpt;
-			break;
-		}
-	}
-	return res;
 }
