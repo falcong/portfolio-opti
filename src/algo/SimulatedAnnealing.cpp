@@ -7,7 +7,6 @@ SimulatedAnnealing::~SimulatedAnnealing() {
 }
 
 Solution SimulatedAnnealing::solve(DetQuadProblem& pb, Solver& s) const {
-	//return solve(pb.getSimpleLinearProblem(), s);
 	LinearProblem lp;
 	lp = pb.getSimpleLinearProblem();
 
@@ -31,7 +30,7 @@ Solution SimulatedAnnealing::solve(DetQuadProblem& pb, Solver& s) const {
 			Solution sol_altered = lp.getNeighbour(sol, 1);
 			// So we transform the pb to force the Y_i change
 			lp = pb.getFixedLP(sol_altered);
-			sol_altered = s.getAdmissibleSolution(&lp);
+			sol_altered = s.getBestSolution(&lp);
 
 			float alteredRisk = pb.objectiveFunction(sol_altered);
 			variation = solRisk - alteredRisk;
