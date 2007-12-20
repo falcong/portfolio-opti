@@ -26,6 +26,7 @@ public:
 		return os << s.toString();
 	};
 	virtual std::string toString() const;
+	virtual float getZ();
 	virtual void print() const;
 };
 

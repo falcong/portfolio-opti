@@ -4,7 +4,10 @@
 // including <QtGui> saves us to include every class user, <QString>, <QFileDialog>,...
 
 GUI::GUI(QWidget *parent) {
+	solver = new LpsolveAdaptator();
 	setupUi(this); // this sets up GUI
+	setWindowTitle(QString("Optimisation de gestion de portefeuilles"));
+	setMessage(QString(""));
 	desactivateAll();
 
 	connect( comboBox_filename, SIGNAL( activated(int) ), this, SLOT( setDirectory(int) ) );
@@ -25,11 +28,21 @@ void GUI::setDirectory(int index) {
 		string path = comboBox_filename->itemText(index).toLocal8Bit().constData();
 		std::cout << "open file" << path << std::endl;
 	//TODO : onpen file and handle it... see with parser
-		detProblem = FileParser::parseDetModel(
+		index--;
+		detQProblem = FileParser::parseDetModel(
 				instancesFiles.at(index).toLocal8Bit().constData(), 
 				instancesFilesFE.at(index).toLocal8Bit().constData());
-		activateAll();
-		setNumberOfTitles(10);
+		if(detQProblem == NULL) {
+			setMessage(QString("Instance non valide."));
+			instancesFiles.removeAt(index);
+			instancesFilesFE.removeAt(index);
+			comboBox_filename->removeItem(index+1);
+		}
+		else {
+			setMessage(QString(""));
+			setNumberOfTitles(detQProblem->getN());
+			activateAll();
+		}
 	}
 }
 
@@ -91,25 +104,32 @@ void GUI::setNumberOfTitles(int nb) {
 }
 
 void GUI::run() {
-	char *algo;
+	char *algo_str;
 
 	int max_iter;
 	float init_temp;
+	algo = NULL;
 	switch (tabWidget_algo->currentIndex()) {
 	case 0:
-		algo = "VNS";
+		desactivateVeryAll();
+		algo_str = "VNS";
 		max_iter = lineEdit_nbIterationsVNS->text().toInt();
 		std::cout << "nb iters : " << max_iter << std::endl;
 		break;
 	case 1:
-		algo = "Recuit";
+		desactivateVeryAll();
+		algo_str = "Recuit";
 		init_temp = lineEdit_initialTemp->text().toFloat();
 		max_iter = lineEdit_nbIterationsRecuit->text().toInt();
 		std::cout << "nb iters : " << max_iter << ", init temp : "<< init_temp
 				<< std::endl;
+		//TODO: make it possible to put init temp and number of iterations
+		algo = new SimulatedAnnealing();
+		
 		break;
 	case 2:
-		algo = "Lagrange";
+		desactivateVeryAll();
+		algo_str = "Lagrange";
 
 		break;
 	}
@@ -118,9 +138,24 @@ void GUI::run() {
 	e = doubleSpinBox_esperance->value();
 	//QTime tmax = timeEdit_maxComputation->time();
 	QString tmax = timeEdit_maxComputation->displayFormat();
-	std::cout << "run on problem with algo " << algo << ", K=" << k
+	std::cout << "run on problem with algo " << algo_str << ", K=" << k
 			<< ", esperance=" << e << ", tmax=" << tmax.toLocal8Bit().constData() << std::endl;
 
+	if(algo != NULL) {
+		Solution solution = algo->solve(*detQProblem, *solver);
+		vector<float> vars_x = solution.getVariables();
+		for(int i = 1; i < (int)vars_x.size(); ++i) {
+			tableWidget_resultProportions->setCellWidget(
+					0, i-1, new QLabel(QString::number(vars_x[i])));
+		}
+		comboBox_filename->setEnabled(true);
+		tableWidget_resultProportions->setEnabled(true);
+		setMessage(QString("Risque obtenu : ") + QString::number(double(solution.getZ()),'g', 8));
+	}
+	else {
+		activateAll();
+		comboBox_filename->setEnabled(true);
+	}
 }
 
 void GUI::activateAll() {
@@ -145,12 +180,13 @@ void GUI::desactivateAll() {
 	lineEdit_nbAvalableTitles->setEnabled(false);
 }
 
-/*
- void Test1::about() 
- {
- QMessageBox::about(this, "About myQtApp",
- "This app was coded for educational purposes.\n"
- "Number 1 is: " + QString::number(spinBox1->value()) + "\n\n"
- "Bye.\n");
- }*/
+void GUI::desactivateVeryAll() {
+	desactivateAll();
+	comboBox_filename->setEnabled(false);
+}
+
+void GUI::setMessage(QString s) {
+	label_resultat->setText(s);
+}
+
 

@@ -54,6 +54,7 @@ public:
 
 	virtual int getK() const;
 	virtual float getRho() const;
+	virtual int getN() const;
 
 	virtual std::string toString() const;
 	virtual void print() const;

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>818</width>
-    <height>514</height>
+    <width>815</width>
+    <height>506</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -45,7 +45,7 @@
      </property>
      <item>
       <property name="text" >
-       <string>Set Directory...</string>
+       <string>Choisir répertoire...</string>
       </property>
      </item>
     </widget>
@@ -59,7 +59,7 @@
       </rect>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
@@ -341,6 +341,12 @@
        <height>111</height>
       </rect>
      </property>
+     <property name="autoFillBackground" >
+      <bool>true</bool>
+     </property>
+     <property name="alternatingRowColors" >
+      <bool>false</bool>
+     </property>
      <row>
       <property name="text" >
        <string>Proportion minimale</string>
@@ -443,7 +449,7 @@
       </font>
      </property>
      <property name="text" >
-      <string>Risque obtenu : 0.05</string>
+      <string> </string>
      </property>
     </widget>
     <widget class="QWidget" name="layoutWidget" >

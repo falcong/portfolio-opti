@@ -1,6 +1,7 @@
 HEADERS     = GUI.h 
 SOURCES	    = GUI.cpp MainGUI.cpp
 FORMS       = GUI.ui
+DEPENDPATH = .. ../util ../../bin ../../bin/util
 
 # install
 target.path = mainGUI

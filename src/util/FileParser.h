@@ -22,7 +22,7 @@ public:
 	FileParser();
 	virtual ~FileParser();
 	
-	DetQuadProblem* parseDetModel(std::string filepath, std::string fileFEpath);
+	static DetQuadProblem* parseDetModel(std::string filepath, std::string fileFEpath);
 	StochLinearProblem* parseStochModel(std::string filepath);
 };
 
