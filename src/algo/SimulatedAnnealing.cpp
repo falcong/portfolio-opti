@@ -32,6 +32,8 @@ Solution SimulatedAnnealing::solve(DetQuadProblem& pb, Solver& s) const {
 
 	float coolingFactor = 0.85, temp = 10, acceptRate = 0.0, variation = 0.0;
 
+	std::cout << "Risk = " << solRisk << " : "<< sol.toString() << std::endl;
+	
 	for (int tempChanges = 0; tempChanges < (pb.getK()* pb.getK())/ 2; ++tempChanges) {
 #ifdef DEBUG
 		std::cout << "Risk = " << solRisk << " : "<< sol.toString() << std::endl;
