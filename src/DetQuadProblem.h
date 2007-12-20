@@ -29,7 +29,11 @@ private:
 
 public:
 	DetQuadProblem(int nbTotalStocks, int stockSelSize, float yield);
+	DetQuadProblem(int nbTotalStocks);
 	virtual ~DetQuadProblem();
+	
+	void setRho(float r);
+	void setK(int k);
 
 	virtual float objectiveFunction(Solution sol) const;
 	virtual Solution getNeighbour(Solution x, int size) const;
