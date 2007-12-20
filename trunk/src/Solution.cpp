@@ -15,7 +15,7 @@ void Solution::addVariable(float var) {
 }
 
 void Solution::changeVariable(int at, float var) {
-	if(at < variable_x.size()) {
+	if(at < (int)variable_x.size()) {
 		variable_x[at] = var;
 	}
 }
