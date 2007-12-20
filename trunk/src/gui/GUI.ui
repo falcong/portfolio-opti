@@ -282,7 +282,11 @@
          </spacer>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_esperance" />
+         <widget class="QDoubleSpinBox" name="doubleSpinBox_esperance" >
+          <property name="singleStep" >
+           <double>0.500000000000000</double>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
