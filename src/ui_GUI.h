@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'GUI.ui'
 **
-** Created: Thu Dec 20 19:01:43 2007
+** Created: Thu Dec 20 21:25:16 2007
 **      by: Qt User Interface Compiler version 4.3.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -290,7 +290,7 @@ public:
     tableWidget_resultProportions->setCornerButtonEnabled(false);
     label_resultat = new QLabel(determinist);
     label_resultat->setObjectName(QString::fromUtf8("label_resultat"));
-    label_resultat->setGeometry(QRect(280, 310, 235, 31));
+    label_resultat->setGeometry(QRect(164, 310, 431, 31));
     QPalette palette;
     QBrush brush(QColor(255, 0, 0, 255));
     brush.setStyle(Qt::SolidPattern);
