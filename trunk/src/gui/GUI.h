@@ -7,6 +7,11 @@
 #include "ui_GUI.h"
 
 #include "../util/FileParser.h"
+#include "../algo/Algo.h"
+#include "../algo/SimulatedAnnealing.h"
+#include "../solver/Solver.h"
+#include "../solver/LpsolveAdaptator.h"
+#include "../Solution.h"
 
 using namespace std;
 
@@ -28,12 +33,17 @@ public slots:
 private:
 	int k; //number of titles
 	double e; //rendement esperance
+	Solver *solver;
+	Algo *algo;
+	DetQuadProblem *detQProblem;
+	
 	QStringList instancesFiles;
 	QStringList instancesFilesFE;
-	DetQuadProblem* detProblem;
+	void setMessage(QString s);
 
 	void activateAll();
 	void desactivateAll();
+	void desactivateVeryAll();
 	
 };
 

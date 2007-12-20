@@ -37,6 +37,10 @@ std::string Solution::toString() const {
 	return os.str();
 }
 
+float Solution::getZ() {
+	return cost_z;
+}
+
 void Solution::print() const {
 	std::cout << toString() << std::endl;
 }

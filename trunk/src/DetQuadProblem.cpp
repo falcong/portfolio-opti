@@ -455,6 +455,10 @@ float DetQuadProblem::getRho() const {
 	return rho;
 }
 
+int DetQuadProblem::getN() const {
+	return n;
+}
+
 std::string DetQuadProblem::toString() const {
 	std::ostringstream os;
 	os << "DetQuad Problem:"<< std::endl;

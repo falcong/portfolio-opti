@@ -30,6 +30,7 @@ int main(void) {
 
 	Algo * algo = new SimulatedAnnealing();
 	Solver * s = new LpsolveAdaptator();
+
 	Solution sol = algo->solve(*dqp, s);
 
 	/*Solution sol = s->getAdmissibleSolution(&lp);
@@ -45,6 +46,7 @@ int main(void) {
 	 sol = s->getAdmissibleSolution(&lp);
 	 std::cout << "Risk = "<< dqp->objectiveFunction(sol) << " : "
 	 << sol.toString() << std::endl;*/
+
 
 	return EXIT_SUCCESS;
 }

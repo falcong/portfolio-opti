@@ -6,8 +6,8 @@ SimulatedAnnealing::SimulatedAnnealing() {
 SimulatedAnnealing::~SimulatedAnnealing() {
 }
 
-Solution SimulatedAnnealing::solve(LinearProblem pb, Solver * s) const {
-	Solution sol = s->getAdmissibleSolution(&pb);
+Solution SimulatedAnnealing::solve(LinearProblem& pb, Solver& s) const {
+	Solution sol = s.getAdmissibleSolution(&pb);
 	float coolingFactor = 0.85, temp = 10, acceptRate = 0.0, variation = 0.0;
 
 	for (int i = 0; acceptRate < getAdaptativeRate(variation, temp) && i
@@ -19,12 +19,12 @@ Solution SimulatedAnnealing::solve(LinearProblem pb, Solver * s) const {
 	return sol;
 }
 
-Solution SimulatedAnnealing::solve(DetQuadProblem pb, Solver *s) const {
+Solution SimulatedAnnealing::solve(DetQuadProblem& pb, Solver& s) const {
 	//return solve(pb.getSimpleLinearProblem(), s);
 	LinearProblem lp;
 	lp = pb.getSimpleLinearProblem();
 
-	Solution sol = s->getAdmissibleSolution(&lp);
+	Solution sol = s.getAdmissibleSolution(&lp);
 	Solution bestSol = sol;
 
 	float solRisk = pb.objectiveFunction(sol);
@@ -42,7 +42,7 @@ Solution SimulatedAnnealing::solve(DetQuadProblem pb, Solver *s) const {
 			Solution sol_altered = lp.getNeighbour(sol, 1);
 			// So we transform the pb to force the Y_i change
 			lp = pb.getFixedLP(sol_altered);
-			sol_altered = s->getAdmissibleSolution(&lp);
+			sol_altered = s.getAdmissibleSolution(&lp);
 
 			float alteredRisk = pb.objectiveFunction(sol_altered);
 			variation = solRisk - alteredRisk;
