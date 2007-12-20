@@ -6,19 +6,6 @@ SimulatedAnnealing::SimulatedAnnealing() {
 SimulatedAnnealing::~SimulatedAnnealing() {
 }
 
-Solution SimulatedAnnealing::solve(LinearProblem& pb, Solver& s) const {
-	Solution sol = s.getAdmissibleSolution(&pb);
-	float coolingFactor = 0.85, temp = 10, acceptRate = 0.0, variation = 0.0;
-
-	for (int i = 0; acceptRate < getAdaptativeRate(variation, temp) && i
-			< pb.getK()* ((pb.getK()> 1) ? pb.getK()-1 : 1)/ 2; ++i) {
-		Solution sol_altered = pb.getNeighbour(sol, 1);
-		variation = pb.objectiveFunction(sol)
-				- pb.objectiveFunction(sol_altered);
-	}
-	return sol;
-}
-
 Solution SimulatedAnnealing::solve(DetQuadProblem& pb, Solver& s) const {
 	//return solve(pb.getSimpleLinearProblem(), s);
 	LinearProblem lp;
