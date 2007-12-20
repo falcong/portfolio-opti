@@ -4,18 +4,18 @@
 #include "Algo.h"
 #include "../solver/Solver.h"
 
-class VNS {
+class VNS : public Algo {
 private:
 	int iterationLimit;
 public:
-	VNS(void);
-	VNS( int _iterationLimit);
+	VNS();
+	VNS(int _iterationLimit);
 
 	~VNS();
 
-	Solution getOptimumLocal(DetQuadProblem pb, Solver * s, const Solution& sol) const;
+	Solution getOptimumLocal(DetQuadProblem pb, Solver &s, const Solution& sol) const;
 	
-	virtual Solution solve(DetQuadProblem pb, Solver * s);
+	virtual Solution solve(DetQuadProblem& pb, Solver &s) const;
 };
 
 #endif /*VNS_H_*/
