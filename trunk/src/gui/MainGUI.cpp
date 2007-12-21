@@ -2,15 +2,17 @@
 
 #include "GUI.h"
 
-#define DORECUIT
+#define DOALGO
+#define DOVNS
+//#define DORECUIT
 
-#ifdef DORECUIT
+#ifdef DOALGO
 #include "../util/FileParser.h"
 #include "../algo/Algo.h"
 #include "../Solution.h"
 #include <iostream>
 using namespace std;
-#endif //DOVNS
+#endif //DOALGO
 int main(int argc, char *argv[]) {
 #ifdef GUI
 	QApplication app(argc, argv);
