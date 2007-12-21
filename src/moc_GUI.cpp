@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'GUI.h'
 **
-** Created: Fri Dec 21 00:27:43 2007
+** Created: Fri Dec 21 01:23:32 2007
 **      by: The Qt Meta Object Compiler version 59 (Qt 4.3.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -22,7 +22,7 @@ static const uint qt_meta_data_GUI[] = {
        1,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   10, // methods
+       5,   10, // methods
        0,    0, // properties
        0,    0, // enums/sets
 
@@ -31,6 +31,7 @@ static const uint qt_meta_data_GUI[] = {
       33,    5,    4,    4, 0x0a,
       51,    4,    4,    4, 0x0a,
       61,    4,    4,    4, 0x0a,
+      67,    4,    4,    4, 0x0a,
 
        0        // eod
 };
@@ -38,6 +39,7 @@ static const uint qt_meta_data_GUI[] = {
 static const char qt_meta_stringdata_GUI[] = {
     "GUI\0\0index\0setDirectoryInit(int)\0"
     "setDirectory(int)\0getPath()\0run()\0"
+    "updateK(int)\0"
 };
 
 const QMetaObject GUI::staticMetaObject = {
@@ -69,8 +71,9 @@ int GUI::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 1: setDirectory((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: getPath(); break;
         case 3: run(); break;
+        case 4: updateK((*reinterpret_cast< int(*)>(_a[1]))); break;
         }
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }

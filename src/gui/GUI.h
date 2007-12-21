@@ -29,9 +29,10 @@ public slots:
 	void setDirectory(int index);
 	void getPath();
 	void run();
-	//void about();
+	void updateK(int);
 
 private:
+	int n;
 	int k; //number of titles
 	double rho; //rendement esperance
 	Solver *solver;
@@ -42,6 +43,7 @@ private:
 	QStringList instancesFilesFE;
 	void setMessage(QString s);
 	void updateY();
+	void setMinMaxTitles();
 
 	void activateAll();
 	void desactivateAll();
