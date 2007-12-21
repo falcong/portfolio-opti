@@ -28,7 +28,9 @@ Solution VNS::solve(DetQuadProblem& pb, Solver& s) const {
 	Solution xPrim, xSecond;
 
 	float min = pb.objectiveFunction(sol);
+#ifdef DEBUG
 	std::cout << "Risk = " << min << " : "<< sol.toString() << std::endl;
+#endif
 	
 	while (i < itLim) {
 		xPrim = lp.getNeighbour(sol, i);
@@ -44,7 +46,9 @@ Solution VNS::solve(DetQuadProblem& pb, Solver& s) const {
 			sol = xPrim;
 			min = risk;
 			i=2;
+#ifdef DEBUG
 			std::cout << "Risk = " << min << " : "<< sol.toString() << std::endl;
+#endif
 		} else {
 			++i;
 		}

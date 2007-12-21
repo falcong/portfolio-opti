@@ -27,9 +27,9 @@ Solution SimulatedAnnealing::solve(DetQuadProblem& pb, Solver& s) const {
 
 	float coolingFactor = 0.85, temp = initialTemp, acceptRate = 0.0, variation = 0.0;
 	int maxChanges = (nbIter > 0) ? nbIter : (pb.getK()* pb.getK())/ 2;
-	
+#ifdef DEBUG
 	std::cout << "Risk = "<< solRisk << " : "<< sol.toString() << std::endl;
-
+#endif
 	for (int tempChanges = 0; tempChanges < maxChanges; ++tempChanges) {
 #ifdef DEBUG
 		std::cout << "Risk = " << solRisk << " : "<< sol.toString() << std::endl;
@@ -54,7 +54,9 @@ Solution SimulatedAnnealing::solve(DetQuadProblem& pb, Solver& s) const {
 			int success = 0;
 			if (variation > 0) {
 				++success;
+#ifdef DEBUG
 				std::cout << "Risk decreasing to "<< alteredRisk << std::endl;
+#endif
 				sol = sol_altered;
 				solRisk = alteredRisk;
 				if (alteredRisk < bestRisk) {
