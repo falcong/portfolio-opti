@@ -3,6 +3,8 @@
 DetQuadProblem::DetQuadProblem(int nbTotalStocks, int stockSelSize, float yield) :
 	n(nbTotalStocks), k(stockSelSize), rho(yield) {
 	for (int i = 0; i < n; ++i) {
+		epsilon.push_back(0.0);
+		delta.push_back(1.0);
 		sigma.push_back(*(new std::vector<float>()));
 		for (int j = 0; j < n; ++j) {
 			sigma[i].push_back(0.0);
@@ -10,8 +12,11 @@ DetQuadProblem::DetQuadProblem(int nbTotalStocks, int stockSelSize, float yield)
 	}
 }
 
-DetQuadProblem::DetQuadProblem(int nbTotalStocks) :	n(nbTotalStocks) {
+DetQuadProblem::DetQuadProblem(int nbTotalStocks) :
+	n(nbTotalStocks) {
 	for (int i = 0; i < n; ++i) {
+		epsilon.push_back(0.0);
+		delta.push_back(1.0);
 		sigma.push_back(*(new std::vector<float>()));
 		for (int j = 0; j < n; ++j) {
 			sigma[i].push_back(0.0);
@@ -479,11 +484,11 @@ int DetQuadProblem::getN() const {
 }
 
 void DetQuadProblem::setEpsilonAt(int pos, float epsi) {
-	epsilon[pos] = epsi;
+	epsilon.at(pos) = epsi;
 }
 
 void DetQuadProblem::setDeltaAt(int pos, float delt) {
-	delta[pos] = delt;
+	delta.at(pos) = delt;
 }
 
 void DetQuadProblem::setBounds(int pos, float lower, float upper) {
