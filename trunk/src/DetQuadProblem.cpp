@@ -65,14 +65,12 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 	int global_pos = 1;
 
 	// Xi sum equals to 1, and Sum of mui * Xi >= rho
-	const float lowerBound = 0;
-	const float upperBound = 1;
 	Constraint c1 = Constraint();
 	Constraint c2 = Constraint();
 	for (int i = 0; i < n; ++i) {
 		std::ostringstream os;
 		os << "X_"<< i;
-		VariableFloat * var = new VariableFloat(global_pos++, os.str(), lowerBound, upperBound);
+		VariableFloat * var = new VariableFloat(global_pos++, os.str(), epsilon[i], delta[i]);
 		lp.addVariable(var);
 		c1.addTerm(*new Term(var, 1));
 		c2.addTerm(*new Term(var, mu[i]));
@@ -133,7 +131,7 @@ LinearProblem DetQuadProblem::getLinearProblem() const {
 			// Adding the c_ij variables
 			std::ostringstream os;
 			os << "C_"<< i << ","<< j;
-			VariableFloat * var = new VariableFloat(global_pos++, os.str(), lowerBound, upperBound);
+			VariableFloat * var = new VariableFloat(global_pos++, os.str(), 0, 1);
 			lp.addVariable(var);
 			obj.addTerm(*new Term(var, (i == j) ? sigma[i][j] : 2*sigma[i][j]));
 			// cij - xi <= 0
@@ -177,14 +175,12 @@ LinearProblem DetQuadProblem::getRelaxedLinearProblem(float lambda1,
 	int global_pos = 1;
 
 	// Xi sum equals to 1, and Sum of mui * Xi >= rho
-	const float lowerBound = 0;
-	const float upperBound = 1;
 	Constraint c1 = Constraint();
 	Constraint c2 = Constraint();
 	for (int i = 0; i < n; ++i) {
 		std::ostringstream os;
 		os << "X_"<< i;
-		VariableFloat * var = new VariableFloat(global_pos++, os.str(), lowerBound, upperBound);
+		VariableFloat * var = new VariableFloat(global_pos++, os.str(), epsilon[i], delta[i]);
 		lp.addVariable(var);
 		c1.addTerm(*new Term(var, 1));
 		c2.addTerm(*new Term(var, mu[i]));
@@ -244,7 +240,7 @@ LinearProblem DetQuadProblem::getRelaxedLinearProblem(float lambda1,
 			// Adding the c_ij variables
 			std::ostringstream os;
 			os << "C_"<< i << ","<< j;
-			VariableFloat * var = new VariableFloat(global_pos++, os.str(), lowerBound, upperBound);
+			VariableFloat * var = new VariableFloat(global_pos++, os.str(), 0, 1);
 			lp.addVariable(var);
 			obj.addTerm(*new Term(var, (i == j) ? sigma[i][j] : 2*sigma[i][j]));
 			// cij - xi <= 0
@@ -317,14 +313,12 @@ LinearProblem DetQuadProblem::getSimpleLinearProblem() const {
 	int global_pos = 1;
 
 	// Xi sum equals to 1, and Sum of mui * Xi >= rho
-	const float lowerBound = 0;
-	const float upperBound = 1;
 	Constraint c1 = Constraint();
 	Constraint c2 = Constraint();
 	for (int i = 0; i < n; ++i) {
 		std::ostringstream os;
 		os << "X_"<< i;
-		VariableFloat * var = new VariableFloat(global_pos++, os.str(), lowerBound, upperBound);
+		VariableFloat * var = new VariableFloat(global_pos++, os.str(), epsilon[i], delta[i]);
 		lp.addVariable(var);
 		c1.addTerm(*new Term(var, 1));
 		c2.addTerm(*new Term(var, mu[i]));
@@ -378,15 +372,13 @@ LinearProblem DetQuadProblem::getFixedLP(Solution sol) const {
 	Objective obj = Objective();
 	int global_pos = 1;
 
-	const float lowerBound = 0;
-	const float upperBound = 1;
 	Constraint c1 = Constraint();
 	Constraint c2 = Constraint();
 
 	for (int i = 0; i < n; ++i) {
 		std::ostringstream os;
 		os << "X_"<< i;
-		VariableFloat * var = new VariableFloat(global_pos++, os.str(), lowerBound, upperBound);
+		VariableFloat * var = new VariableFloat(global_pos++, os.str(), epsilon[i], delta[i]);
 		lp.addVariable(var);
 		c1.addTerm(*new Term(var, 1));
 		c2.addTerm(*new Term(var, mu[i]));
