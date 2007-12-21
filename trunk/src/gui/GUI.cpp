@@ -16,6 +16,7 @@ GUI::GUI(QWidget *parent) {
 	connect( comboBox_filename, SIGNAL( activated(int) ), this, SLOT( setDirectory(int) ) );
 	connect( comboBox_filename, SIGNAL( highlighted(int) ), this, SLOT( setDirectoryInit(int) ) );
 	connect(pushButton_run, SIGNAL(clicked() ), this, SLOT(run() ) );
+	connect(spinBox_K, SIGNAL(valueChanged(int) ), this, SLOT(updateK(int) ) );
 }
 
 void GUI::setDirectoryInit(int index) {
@@ -95,24 +96,32 @@ if(!path.isEmpty()) {
 
 }
 
-void GUI::setNumberOfTitles(int nb) {
-	std::cout << "set number of titles to " << nb << std::endl;
-	lineEdit_nbAvalableTitles->setText(QString::number(nb));
-	spinBox_K->setMaximum(nb);
-	spinBox_K->setValue(nb/2);
-	tableWidget_proportionsMinMax->setColumnCount(nb);
-	
-	for(int i = 0; i<nb; i++) {
+void GUI::updateK(int i) {
+	k = i;
+	setMinMaxTitles();
+}
+
+void GUI::setMinMaxTitles() {
+	double min_val = 1.0/(2.0*double(k));
+	double max_val = 2.0/double(k);
+	for(int i = 0; i<n; i++) {
 		QDoubleSpinBox *s1 = new QDoubleSpinBox(), *s2 = new QDoubleSpinBox();
-		s1->setMaximum(1.0); s1->setMinimum(0.0); s1->setValue(0.0); 
-		s2->setMaximum(1.0); s2->setMinimum(0.0); s2->setValue(1.0); 
+		s1->setMaximum(1.0); s1->setMinimum(0.0); s1->setValue(min_val);
+		s2->setMaximum(1.0); s2->setMinimum(0.0); s2->setValue(max_val); 
 		s1->setSingleStep(0.05); s2->setSingleStep(0.05);
 		tableWidget_proportionsMinMax->setCellWidget(0, i, s1);
 		tableWidget_proportionsMinMax->setCellWidget(1, i, s2);
 	}
-	tableWidget_resultProportions->setColumnCount(nb);
-	
+}
 
+void GUI::setNumberOfTitles(int nb) {
+	std::cout << "set number of titles to " << nb << std::endl;
+	n = nb;
+	lineEdit_nbAvalableTitles->setText(QString::number(nb));
+	tableWidget_proportionsMinMax->setColumnCount(nb);
+	tableWidget_resultProportions->setColumnCount(nb);
+	spinBox_K->setMaximum(nb);
+	spinBox_K->setValue(nb/2);
 }
 
 void GUI::updateY() {
@@ -126,7 +135,6 @@ void GUI::run() {
 	int max_iter;
 	float init_temp;
 	algo = NULL;
-	k = spinBox_K->value();
 	rho = doubleSpinBox_esperance->value()/100.0;
 	
 	updateY();
@@ -148,7 +156,9 @@ void GUI::run() {
 		std::cout << "nb iters : " << max_iter << ", init temp : "<< init_temp
 				<< std::endl;
 		//TODO: make it possible to put init temp and number of iterations
-		algo = new SimulatedAnnealing();
+		if(init_temp > 0.0 && max_iter > 0) 
+			algo = new SimulatedAnnealing(init_temp, max_iter);
+		else algo = new SimulatedAnnealing();
 		
 		break;
 	case 2:
@@ -165,15 +175,21 @@ void GUI::run() {
 
 	if(algo != NULL) {
 		Solution solution = algo->solve(*detQProblem, *solver);
-		vector<float> vars_x = solution.getVariables();
-		for(int i = 0; i < (int)vars_x.size(); ++i) {
-			tableWidget_resultProportions->setCellWidget(
-					0, i, new QLabel(QString::number(vars_x[i])));
+		if(solution.isNull()) {
+			setMessage(QString("No solution."));
+		}
+		else {
+			vector<float> vars_x = solution.getVariables();
+			for(int i = 0; i < (int)vars_x.size(); ++i) {
+				tableWidget_resultProportions->setCellWidget(
+						0, i, new QLabel(QString::number(vars_x[i])));
+			}
+			tableWidget_resultProportions->setEnabled(true);
+			setMessage(QString("Risque : ") + QString::number(double(solution.getZ())*100,'g', 5)+ QString("%"));
 		}
 		comboBox_filename->setEnabled(true);
-		tableWidget_resultProportions->setEnabled(true);
 		cout << "z : " << solution.getZ() << endl;
-		setMessage(QString("Risque : ") + QString::number(double(solution.getZ())*100,'g', 5)+ QString("%"));
+		
 	}
 	else {
 		activateAll();
