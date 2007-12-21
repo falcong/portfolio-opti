@@ -297,6 +297,8 @@ LinearProblem DetQuadProblem::getRelaxedLinearProblem(float lambda1,
 			// ou alors c'est une faute de frappe et c'est sigma_ij
 			obj.addTerm(*new Term(lp.getVariables()[n+i], lambda2 * sigma[i][j]));
 			obj.addTerm(*new Term(var, -1.0 * lambda2));
+			/* sinon c'est ca, mais ca me semble bizarre :
+			 * obj.addTerm(*new Term(lp.getVariables()[n+i], lambda2 * sigma[i][i]));*/
 		}
 	}
 	lp.setObjective(obj);
@@ -474,6 +476,19 @@ float DetQuadProblem::getRho() const {
 
 int DetQuadProblem::getN() const {
 	return n;
+}
+
+void DetQuadProblem::setEpsilonAt(int pos, float epsi) {
+	epsilon[pos] = epsi;
+}
+
+void DetQuadProblem::setDeltaAt(int pos, float delt) {
+	delta[pos] = delt;
+}
+
+void DetQuadProblem::setBounds(int pos, float lower, float upper) {
+	setEpsilonAt(pos, lower);
+	setDeltaAt(pos, upper);
 }
 
 std::string DetQuadProblem::toString() const {
