@@ -128,6 +128,14 @@ void GUI::updateY() {
 	cout << "update problem with k=" << k << " and rho=" << rho << endl;
 	detQProblem->setK(k);
 	detQProblem->setRho(rho);
+	float min, max;
+	for(int i=0; i<n; i++) {
+		cout << i << endl;
+		min = ((QDoubleSpinBox*)(tableWidget_proportionsMinMax->cellWidget(0, i)))->text().toFloat();
+		max = ((QDoubleSpinBox*)(tableWidget_proportionsMinMax->cellWidget(1, i)))->text().toFloat();
+		detQProblem->setBounds(i, min, max);
+	}
+	
 }
 
 void GUI::run() {
@@ -203,7 +211,7 @@ void GUI::activateAll() {
 	tableWidget_proportionsMinMax->setEnabled(true);
 	tableWidget_resultProportions->setEnabled(true);
 	tabWidget_algo->setEnabled(true);
-	timeEdit_maxComputation->setEnabled(true);
+	//timeEdit_maxComputation->setEnabled(true);
 	doubleSpinBox_esperance->setEnabled(true);
 	lineEdit_nbAvalableTitles->setEnabled(true);
 }
