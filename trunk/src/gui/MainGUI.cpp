@@ -2,11 +2,15 @@
 
 #include "GUI.h"
 
-#define VNS
+#define DOVNS
 
-#ifdef VNS
+#ifdef DOVNS
 #include "../util/FileParser.h"
-#endif //VNS
+#include "../algo/Algo.h"
+#include "../Solution.h"
+#include <iostream>
+using namespace std;
+#endif //DOVNS
 
 int main(int argc, char *argv[])
 {
@@ -18,10 +22,18 @@ int main(int argc, char *argv[])
     return app.exec();
 #endif //GUI
 
-#ifdef VNS
-    char* file = argv[0];
-    float rho = QString(argv[1]).toFloat();
-    FileParser::parseDetModel(file, NULL);
-#endif //VNS
+#ifdef DOVNS
+    Solver *solver = new LpsolveAdaptator();
+    DetQuadProblem *detQProblem;
+    Algo *algo;
+    char* file = argv[1];
+    float rho = QString(argv[2]).toFloat();
+    detQProblem = FileParser::parseDetModel(file, " ");
+    detQProblem->setRho(rho);
+    detQProblem->setK(detQProblem->getN()/2);
+    algo = new VNS();
+    Solution solution = algo->solve(*detQProblem, *solver);
+    cout << solution.getZ() << endl;
+#endif //DOVNS
 }
 
