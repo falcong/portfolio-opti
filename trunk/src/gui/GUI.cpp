@@ -163,7 +163,6 @@ void GUI::run() {
 		max_iter = lineEdit_nbIterationsRecuit->text().toInt();
 		std::cout << "nb iters : " << max_iter << ", init temp : "<< init_temp
 				<< std::endl;
-		//TODO: make it possible to put init temp and number of iterations
 		if(init_temp > 0.0 && max_iter > 0) 
 			algo = new SimulatedAnnealing(init_temp, max_iter);
 		else algo = new SimulatedAnnealing();
@@ -202,6 +201,7 @@ void GUI::run() {
 	else {
 		activateAll();
 		comboBox_filename->setEnabled(true);
+		setMessage(QString("Not linked!"));
 	}
 }
 
