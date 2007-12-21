@@ -59,6 +59,10 @@ public:
 	virtual int getK() const;
 	virtual float getRho() const;
 	virtual int getN() const;
+	
+	virtual void setEpsilonAt(int pos, float epsi);
+	virtual void setDeltaAt(int pos, float delt);
+	virtual void setBounds(int pos, float lower, float upper);
 
 	virtual std::string toString() const;
 	virtual void print() const;
