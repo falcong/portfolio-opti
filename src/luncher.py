@@ -40,11 +40,11 @@ for i in range(len(ports)):
         output = commands.getoutput(command)
         if regOUTPUT.search(output): 
           results[j] += "%s %s\n" % (res.groupdict()["rho"] ,output)
-          print results[j]
-        else: print output
+          #print results[j]
+        #else: print output
 
-  write_result('../benchmark/'+portsFE[i]+'_vns', results[0])
-  write_result('../benchmark/'+portsFE[i]+'_recuit', results[1])
+  write_result('../benchmark/log/'+portsFE[i]+'_vns.log', results[0])
+  write_result('../benchmark/log/'+portsFE[i]+'_recuit.log', results[1])
   
 
           
