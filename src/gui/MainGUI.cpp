@@ -3,8 +3,8 @@
 #include "GUI.h"
 
 #define DOALGO
-#define DOVNS
-//#define DORECUIT
+//#define DOVNS
+#define DORECUIT
 
 #ifdef DOALGO
 #include "../util/FileParser.h"
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 	detQProblem = FileParser::parseDetModel(file, " ");
 	detQProblem->setRho(rho);
 	detQProblem->setK(detQProblem->getN()/2);
-	algo = new VNS();
+	algo = new VNS(detQProblem->getN()/2);
 	Solution solution = algo->solve(*detQProblem, *solver);
 	cout << solution.getZ() << endl;
 #endif //DOVNS
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 	detQProblem = FileParser::parseDetModel(file, " ");
 	detQProblem->setRho(rho);
 	detQProblem->setK(detQProblem->getN()/2);
-	algo = new SimulatedAnnealing();
+	algo = new SimulatedAnnealing(30, detQProblem->getN()*detQProblem->getN()/2);
 	Solution solution = algo->solve(*detQProblem, *solver);
 	cout << solution.getZ() << endl;
 #endif
