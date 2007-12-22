@@ -35,7 +35,6 @@ Solution VNS::solve(DetQuadProblem& pb, Solver& s) const {
 	while (i < itLim) {
 		xPrim = lp.getNeighbour(sol, i);
 		lp = pb.getFixedLP(xPrim);
-		lp.print();
 		xPrim = s.getBestSolution(&lp);
 		if (xPrim.isNull()) {
 			++i;
