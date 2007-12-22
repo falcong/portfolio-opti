@@ -47,7 +47,7 @@ void Solution::print() const {
 
 bool Solution::isNull() const {
 	for(int i = 0; i < (int)variable_x.size(); ++i) {
-		if(variable_x[i] != 0.0) {
+		if(variable_x[i] < 0) {
 			return false;
 		}
 	}

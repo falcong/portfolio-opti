@@ -41,9 +41,8 @@ Solution SimulatedAnnealing::solve(DetQuadProblem& pb, Solver& s) const {
 			// So we transform the pb to force the Y_i change
 			lp = pb.getFixedLP(sol_altered);
 			sol_altered = s.getBestSolution(&lp);
-			if (sol_altered.isNull()) {
-				continue;
-			}
+			
+			if (!sol_altered.isNull()) {
 
 			float alteredRisk = pb.objectiveFunction(sol_altered);
 			variation = solRisk - alteredRisk;
@@ -52,16 +51,17 @@ Solution SimulatedAnnealing::solve(DetQuadProblem& pb, Solver& s) const {
 			std::cout << "Risk = " << alteredRisk << " : "<< sol_altered.toString() << std::endl;
 #endif
 			int success = 0;
-			if (variation > 0) {
-				++success;
+				if (variation > 0) {
+					++success;
 #ifdef DEBUG
-				std::cout << "Risk decreasing to "<< alteredRisk << std::endl;
+					std::cout << "Risk decreasing to "<< alteredRisk << std::endl;
 #endif
-				sol = sol_altered;
-				solRisk = alteredRisk;
-				if (alteredRisk < bestRisk) {
-					bestSol = sol_altered;
-					bestRisk = alteredRisk;
+					sol = sol_altered;
+					solRisk = alteredRisk;
+					if (alteredRisk < bestRisk) {
+						bestSol = sol_altered;
+						bestRisk = alteredRisk;
+					}
 				}
 			}
 			temp = coolingFactor * temp;
