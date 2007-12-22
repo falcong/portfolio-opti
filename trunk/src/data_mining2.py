@@ -8,97 +8,47 @@ __author__ = 'pierre.ruyssen@gmail.com (Pierre Ruyssen)'
 import re
 import sys
 import commands
+import os
 
-from utils import debug
+def write_result(file_name, result):
+  f = open(file_name, 'w')
+  for line in result:
+    f.write(line)
+  f.close()
 
 DEFAULT_OUTPUT = "output.csv" #output file
 
 # list of files to execute, with the different
 # combinaisons of arguments
-EXECS = {"./vns |file| |rho|": 'vns',
-	 "./recuit |file| |rho|": 'recuit'}
+EXECS = ['./vns', './recuit']
+results = ['' for i in range(len(EXECS))]
 
-# Possible options and their list of values
-OPTIONS = {'|arg1|': [1,2,4,6,8,16,56,128],
-           '|arg2|': [10, 100, 1000, 10000],
-           }
+ports = ['SIMPLE.txt', 'FTSE.txt', 'HG.txt', 'NKI.txt', 'SetP.txt', 'DAX.txt']
+portsFE = ['SIMPLE_FE.txt', 'FTSE_FE.txt', 'HG_FE.txt', 'NKI_FE.txt', 'SetP_FE.txt', 'DAX_FE.txt']
 
-#If you want custom transfer from data to argument, define the function arg1()...
+regFE = re.compile("(?P<rho>\d*[\.|,]\d+)\s+(?P<risk>\d*[\.|,]\d+)")
+regOUTPUT = re.compile("(?P<risk>\d*[\.|,]\d+)")
 
+for i in range(len(ports)):
+  f = open('../benchmark/'+portsFE[i], 'r')
+  for line in f:
+    res = regFE.search(line)
+    if res:
+      for j in range(len(EXECS)):
+        command = "%s ../benchmark/%s %s" % (EXECS[j], ports[i], res.groupdict()["rho"])
+        print command
+        output = commands.getoutput(command)
+        if regOUTPUT.search(output): 
+          results[j] += "%s %s\n" % (res.groupdict()["rho"] ,output)
+          print results[j]
+        else: print output
 
-# number of times each combinaition is launched
-NB_LUNCHS = 1
-
-regs = ["(?P<test1>\d+\.\d+)"]
-
-regs = map(lambda r: re.compile(r, re.MULTILINE), regs)
-results_names = reduce(lambda e1, e2: e1+e2, map(lambda e: e.groupindex.keys(), regs), [])
-number_of_results = len(results_names)
-RESULTS = []
-
-USAGE = "Usage: "+sys.argv[0]
-
-#@debug.displayReturn
-def mutateOptions(options):
-  """ Transform the dict in list of lists of tuplets.
-  """
-  options2 = []
-  for option in options:
-    values = options[option]
-    options2.append([(option, v) for v in values])
-  return options2
+  write_result('../benchmark/'+portsFE[i]+'_vns', results[0])
+  write_result('../benchmark/'+portsFE[i]+'_recuit', results[1])
   
-@debug.displayReturn
-def add_args(command, args):
-  return [command+[args[i]] for i in range(len(args))]
 
-def treat_result(executable, args, output):
-  results = dict()
-  for reg in regs:
-    res = reg.search(output)
-    if res: results.update(res.groupdict())
-  assert len(results) == number_of_results, "assertion error"
-  #args = dict(args)
-  #args = '\t'.join(map(lambda e: str(1), args.keys()))
-  args = '\t'.join(map(lambda e: str(e[1]), args))
-  line = "%s\t%s\t%s\n" % (executable, args, '\t'.join([results[k] for k in results_names]))
-  RESULTS.append(line)
- 
-def write_result():
-  file = open(DEFAULT_OUTPUT, 'w')
-  for line in RESULTS:
-    file.write(line)
-  file.close()
-  
-def main():
-  options = mutateOptions(OPTIONS)
-  arguments = [[]]
-  
-  for option in options:
-    arguments2 = []
-    for arg in arguments:
-      arguments2.extend(add_args(arg, option))
-    arguments = arguments2
-    
-  RESULTS.append("Executable\t%s\n" % ("\t".join(OPTIONS.keys()+results_names)))
-  
-  try:
-    nb = len(arguments) * len(EXECS) * NB_LUNCHS
-    cpt = 0
-    for executable in EXECS:
-      for arg in arguments:
-        comm = executable
-        for a in arg:
-          comm = comm.replace(str(a[0]), str(a[1]), 1);
-        for i in range(NB_LUNCHS):
-          cpt += 1
-          print "[%s/%s]%s" % (cpt, nb, comm)
-          output = commands.getoutput(comm)
-          treat_result(EXECS[executable], arg, output)
-  except Exception, e:
-    RESULTS.append(str(e))
-    print e
-  write_result()
+          
 
-if __name__ == "__main__":
-  main()
+
+
+
